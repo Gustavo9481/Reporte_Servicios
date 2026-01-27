@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Reportes de Reparaciones</title>
+        <link rel="stylesheet" href="/static/css/styles.css?v=1.1" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Gestión de Reportes de Reparaciones</h1>
+            <p>Selecciona la opción que desee</p>
+
+            <div class="menu-options">
+                <button id="btnNuevoReporte" data-action="nuevo">Nuevo Reporte</button>
+                <button id="btnConsultarReporte" data-action="consultar-id">Consultar ID Reporte</button>
+                <button id="btnConsultarCliente" data-action="consultar-cliente">Consultar Cliente</button>
+                <button id="btnListaReportes" data-action="listar">Lista de Reportes</button>
+            </div>
+
+            <div id="contentArea">
+                <pre id="apiResponse" style="display: none"></pre>
+            </div>
+        </div>
+
+        <script src="/static/js/scripts.js?v=1.1"></script>
+    </body>
+</html>

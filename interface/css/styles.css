@@ -1,0 +1,308 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1 {
+    color: #0056b3;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    min-width: 180px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#contentArea {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+#apiResponse {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    text-align: left;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 800px; /* Aumentado para dar más espacio */
+    margin: 20px auto;
+}
+
+.menu-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* --- ESTILOS PARA LA TABLA DE REPORTES --- */
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 14px;
+}
+.reports-table th,
+.reports-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+.reports-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #333;
+}
+.reports-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+.reports-table td button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    min-width: auto;
+}
+.reports-table .btn-ver-detalles {
+    background-color: #28a745;
+}
+.reports-table .btn-ver-detalles:hover {
+    background-color: #218838;
+}
+
+/* --- ESTILOS PARA VISTA DE DETALLES --- */
+.report-detail-view {
+    text-align: left;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+.report-detail-view h2 {
+    text-align: center;
+    border-bottom: 2px solid #0056b3;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.report-detail-view h3 {
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+.details-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+.details-table th,
+.details-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+.details-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    width: 30%;
+}
+.details-table.checklist-table td {
+    width: 50%;
+    text-align: left; /* Alineado a la izquierda */
+    font-weight: 500;
+}
+.status {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: white;
+    text-transform: capitalize;
+    display: inline-block;
+}
+.status.activa {
+    background-color: #28a745;
+}
+.status.anulada {
+    background-color: #dc3545;
+}
+#btnVolverLista {
+    margin-top: 25px;
+    background-color: #6c757d;
+}
+#btnVolverLista:hover {
+    background-color: #5a6268;
+}
+
+p.details-text {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+    white-space: pre-wrap; /* Respeta saltos de línea y espacios */
+    line-height: 1.5;
+}
+
+/* --- ESTILOS PARA FORMULARIOS --- */
+.report-form {
+    text-align: left;
+}
+.form-section {
+    background: #fdfdfd;
+    border: 1px solid #eaeaea;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+.form-section h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+.report-form input[type="text"],
+.report-form input[type="number"],
+.report-form select,
+.report-form textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.report-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.checklist-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+.checklist-form-grid label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.dynamic-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.dynamic-item input:first-child {
+    max-width: 80px;
+}
+.btn-add {
+    background-color: #17a2b8;
+    min-width: auto;
+}
+.btn-add:hover {
+    background-color: #138496;
+}
+.btn-remove {
+    background-color: #dc3545;
+    min-width: auto;
+    padding: 5px 10px;
+    font-size: 12px;
+}
+.btn-remove:hover {
+    background-color: #c82333;
+}
+.form-actions {
+    text-align: right;
+}
+.form-actions button[type="submit"] {
+    background-color: #28a745;
+    font-size: 18px;
+    padding: 12px 25px;
+}
+.form-actions button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* --- ESTILOS PARA EL CHECKLIST EN VISTA DE DETALLES --- */
+.details-table.checklist-table .check-true {
+    background-color: #f8d7da; /* Rojo claro para indicar alerta/problema */
+    color: #721c24;
+}
+
+/* --- ESTILOS PARA BOTONES DE ACCIÓN EN DETALLES --- */
+.btn-generar-pdf,
+.btn-editar {
+    display: inline-block;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-generar-pdf {
+    background-color: #dc3545; /* Rojo */
+}
+
+.btn-generar-pdf:hover {
+    background-color: #c82333;
+}
+
+.btn-editar {
+    background-color: #007bff; /* Azul */
+}
+
+.btn-editar:hover {
+    background-color: #0056b3;
+}
+
+/* --- ESTILO PARA FORZAR ANCHO COMPLETO EN TEXTAREA --- */
+.form-full-width-item {
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
+.form-full-width-item textarea {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+}
