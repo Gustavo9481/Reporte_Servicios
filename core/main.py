@@ -1,4 +1,4 @@
-# MODULO: core
+# MODULO: core/main.py
 # Archivo de lanzamiento de la app, almacén de endpoints.
 
 from contextlib import asynccontextmanager
@@ -14,10 +14,9 @@ from starlette.responses import (
 )
 from starlette.staticfiles import StaticFiles
 
+from core.pdf_generator import generate_report_pdf
 from data import models
 from data.database import create_db_tables, get_db
-
-# from core.pdf_generator import generate_report_pdf
 
 
 @asynccontextmanager
@@ -162,6 +161,78 @@ def find_cedula(cedula_cliente: int, db: Session = Depends(get_db)):
     if not reportes:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Cliente no encontrado"
+        )
+
+    return reportes
+
+
+# ENDPOINT: filtro de búsqueda por nombre de cliente.
+@app.get(
+    "/reportes/cliente/nombre/{nombre}",
+    response_model=List[models.Reporte],
+    tags=["Reportes"],
+)
+def find_nombre(nombre: str, db: Session = Depends(get_db)):
+    """Lee reportes asociados a un nombre de cliente (coincidencia parcial)"""
+    reportes = (
+        db.query(models.ReportesDB)
+        .options(joinedload(models.ReportesDB.servicios))
+        .options(joinedload(models.ReportesDB.repuestos))
+        .filter(models.ReportesDB.nombre_cliente.ilike(f"%{nombre}%"))
+        .all()
+    )
+
+    if not reportes:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Nombre de cliente no encontrado"
+        )
+
+    return reportes
+
+
+# ENDPOINT: filtro de búsqueda por teléfono de cliente.
+@app.get(
+    "/reportes/cliente/telefono/{telefono}",
+    response_model=List[models.Reporte],
+    tags=["Reportes"],
+)
+def find_telefono(telefono: int, db: Session = Depends(get_db)):
+    """Lee reportes asociados a un número de teléfono específico"""
+    reportes = (
+        db.query(models.ReportesDB)
+        .options(joinedload(models.ReportesDB.servicios))
+        .options(joinedload(models.ReportesDB.repuestos))
+        .filter(models.ReportesDB.telefono_cliente == telefono)
+        .all()
+    )
+
+    if not reportes:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Teléfono no encontrado"
+        )
+
+    return reportes
+
+
+# ENDPOINT: filtro de búsqueda por placa de vehículo.
+@app.get(
+    "/reportes/placa/{placa}",
+    response_model=List[models.Reporte],
+    tags=["Reportes"],
+)
+def find_placa(placa: str, db: Session = Depends(get_db)):
+    """Lee reportes asociados a una placa de vehículo específica"""
+    reportes = (
+        db.query(models.ReportesDB)
+        .options(joinedload(models.ReportesDB.servicios))
+        .options(joinedload(models.ReportesDB.repuestos))
+        .filter(models.ReportesDB.placa == placa)
+        .all()
+    )
+
+    if not reportes:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="No se encontraron reportes para esta placa"
         )
 
     return reportes

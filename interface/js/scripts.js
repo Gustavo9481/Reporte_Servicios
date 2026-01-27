@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Referencias a los elementos del DOM
   const btnNuevoReporte = document.getElementById("btnNuevoReporte");
   const btnConsultarReporte = document.getElementById("btnConsultarReporte");
+  const btnConsultarPlaca = document.getElementById("btnConsultarPlaca");
   const btnConsultarCliente = document.getElementById("btnConsultarCliente");
   const btnListaReportes = document.getElementById("btnListaReportes");
   const contentArea = document.getElementById("contentArea");
@@ -678,30 +679,80 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  btnConsultarCliente.addEventListener("click", () => {
+  btnConsultarPlaca.addEventListener("click", () => {
     let html = `
-            <h2>Consultar Reportes por Cédula de Cliente</h2>
+            <h2>Consultar Reportes por Placa de Vehículo</h2>
             <div class="form-container">
-                <input type="text" id="cedulaClienteInput" placeholder="Introduce la cédula del cliente" />
-                <button id="btnBuscarCliente">Buscar</button>
+                <input type="text" id="placaInput" placeholder="Introduce la placa (ej: ABC12D)" />
+                <button id="btnBuscarPlaca">Buscar</button>
             </div>
         `;
     showContent(html);
-    document.getElementById("btnBuscarCliente").addEventListener("click", async () => {
-      const cedulaCliente = document.getElementById("cedulaClienteInput").value;
-      if (!cedulaCliente) {
-        showContent('<p class="error-message">Por favor, introduce una cédula.</p>');
+    document.getElementById("btnBuscarPlaca").addEventListener("click", async () => {
+      const placa = document.getElementById("placaInput").value;
+      if (!placa) {
+        showContent('<p class="error-message">Por favor, introduce una placa.</p>');
         return;
       }
-      showContent(`<p>Cargando reportes para la cédula: ${cedulaCliente}...</p>`);
+      showContent(`<p>Cargando reportes para la placa: ${placa}...</p>`);
       try {
-        const response = await fetch(`/reportes/cliente/${cedulaCliente}`);
+        const response = await fetch(`/reportes/placa/${placa}`);
         const data = await response.json();
         if (response.ok) {
           renderReportList(data);
         } else {
           showContent(
-            `<p class="error-message">Error: ${data.detail || "No se encontraron reportes para esta cédula."}</p>`,
+            `<p class="error-message">Error: ${data.detail || "No se encontraron reportes para esta placa."}</p>`,
+          );
+        }
+      } catch (error) {
+        showContent(`<p class="error-message">Error de red: ${error.message}`);
+      }
+    });
+  });
+
+  btnConsultarCliente.addEventListener("click", () => {
+    let html = `
+            <h2>Consultar Reportes por Cliente</h2>
+            <div class="form-container" style="display: flex; flex-direction: column; gap: 10px; max-width: 400px; margin: 0 auto;">
+                <input type="number" id="cedulaClienteInput" placeholder="Buscar por Cédula" />
+                <input type="text" id="nombreClienteInput" placeholder="Buscar por Nombre" />
+                <input type="number" id="telefonoClienteInput" placeholder="Buscar por Teléfono" />
+                <button id="btnBuscarCliente" style="margin-top: 10px;">Buscar</button>
+            </div>
+        `;
+    showContent(html);
+    document.getElementById("btnBuscarCliente").addEventListener("click", async () => {
+      const cedula = document.getElementById("cedulaClienteInput").value;
+      const nombre = document.getElementById("nombreClienteInput").value;
+      const telefono = document.getElementById("telefonoClienteInput").value;
+
+      let url = "";
+      let searchMsg = "";
+
+      if (cedula) {
+        url = `/reportes/cliente/${cedula}`;
+        searchMsg = `cédula: ${cedula}`;
+      } else if (nombre) {
+        url = `/reportes/cliente/nombre/${encodeURIComponent(nombre)}`;
+        searchMsg = `nombre: ${nombre}`;
+      } else if (telefono) {
+        url = `/reportes/cliente/telefono/${telefono}`;
+        searchMsg = `teléfono: ${telefono}`;
+      } else {
+        alert("Por favor, introduce al menos un criterio de búsqueda (Cédula, Nombre o Teléfono).");
+        return;
+      }
+
+      showContent(`<p>Cargando reportes para ${searchMsg}...</p>`);
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (response.ok) {
+          renderReportList(data);
+        } else {
+          showContent(
+            `<p class="error-message">Error: ${data.detail || "No se encontraron reportes para esta búsqueda."}</p>`,
           );
         }
       } catch (error) {
