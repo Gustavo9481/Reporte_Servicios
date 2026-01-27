@@ -82,19 +82,73 @@ document.addEventListener("DOMContentLoaded", () => {
                             <tr><th>Teléfono</th><td>${data.telefono_cliente}</td></tr>
                         </table>
 
-                        <h3>Checklist del Vehículo</h3>
+                        <h3>Checklist: Carrocería</h3>
                         <table class="details-table checklist-table">
                             <tr>
-                                <td class="${data.carroceria_golpe ? "check-true" : "check-false"}">Golpes en Carrocería ${data.carroceria_golpe ? "<strong>(X)</strong>" : ""}</td>
-                                <td class="${data.carroceria_vidrio_roto ? "check-true" : "check-false"}">Vidrios Rotos ${data.carroceria_vidrio_roto ? "<strong>(X)</strong>" : ""}</td>
+                                <td class="${data.carroceria_golpe ? "check-true" : "check-false"}">Golpe: ${data.carroceria_golpe ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.carroceria_suelto ? "check-true" : "check-false"}">Suelto: ${data.carroceria_suelto ? "<strong>SI</strong>" : "NO"}</td>
                             </tr>
                             <tr>
-                                <td class="${data.accesorios_alfombra ? "check-true" : "check-false"}">Alfombras ${data.accesorios_alfombra ? "<strong>(X)</strong>" : ""}</td>
-                                <td class="${data.accesorios_radio ? "check-true" : "check-false"}">Radio ${data.accesorios_radio ? "<strong>(X)</strong>" : ""}</td>
+                                <td class="${data.carroceria_rayas ? "check-true" : "check-false"}">Rayas: ${data.carroceria_rayas ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.carroceria_desconchado ? "check-true" : "check-false"}">Desconchado: ${data.carroceria_desconchado ? "<strong>SI</strong>" : "NO"}</td>
                             </tr>
                             <tr>
-                                <td class="${data.sistem_electric_frenos_del ? "check-true" : "check-false"}">Frenos Delanteros ${data.sistem_electric_frenos_del ? "<strong>(X)</strong>" : ""}</td>
-                                <td class="${data.sistem_electric_tablero ? "check-true" : "check-false"}">Tablero Eléctrico ${data.sistem_electric_tablero ? "<strong>(X)</strong>" : ""}</td>
+                                <td class="${data.carroceria_vidrio_roto ? "check-true" : "check-false"}">Vidrio Roto: ${data.carroceria_vidrio_roto ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.carroceria_falta_moldura ? "check-true" : "check-false"}">Falta Moldura: ${data.carroceria_falta_moldura ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.carroceria_falta_faro ? "check-true" : "check-false"}">Falta Faro: ${data.carroceria_falta_faro ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.carroceria_falta_accesorio ? "check-true" : "check-false"}">Falta Accesorio: ${data.carroceria_falta_accesorio ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.carroceria_espejo_roto ? "check-true" : "check-false"}">Espejo Roto: ${data.carroceria_espejo_roto ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.carroceria_falta_centro_copas ? "check-true" : "check-false"}">Falta Centro Copas: ${data.carroceria_falta_centro_copas ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="${data.carroceria_otro ? "check-true" : "check-false"}">Otro (Carrocería): ${data.carroceria_otro ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                        </table>
+
+                        <h3>Checklist: Accesorios</h3>
+                        <table class="details-table checklist-table">
+                            <tr>
+                                <td class="${data.accesorios_alfombra_delantera ? "check-true" : "check-false"}">Alfombra Del: ${data.accesorios_alfombra_delantera ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.accesorios_alfombra_trasera ? "check-true" : "check-false"}">Alfombra Tras: ${data.accesorios_alfombra_trasera ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.accesorios_radio ? "check-true" : "check-false"}">Radio: ${data.accesorios_radio ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.accesorios_radio_reproductor ? "check-true" : "check-false"}">Reproductor: ${data.accesorios_radio_reproductor ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.accesorios_antena_electrica ? "check-true" : "check-false"}">Antena Eléc: ${data.accesorios_antena_electrica ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.accesorios_encendedor_cigarrillos ? "check-true" : "check-false"}">Encendedor: ${data.accesorios_encendedor_cigarrillos ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.accesorios_triangulo_seguridad ? "check-true" : "check-false"}">Triángulo Seg: ${data.accesorios_triangulo_seguridad ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.accesorios_gato ? "check-true" : "check-false"}">Gato: ${data.accesorios_gato ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.accesorios_caucho_repuesto ? "check-true" : "check-false"}">Caucho Rep: ${data.accesorios_caucho_repuesto ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.accesorios_otro ? "check-true" : "check-false"}">Otro (Accesorios): ${data.accesorios_otro ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                        </table>
+
+                        <h3>Checklist: Sistemas Eléctricos</h3>
+                        <table class="details-table checklist-table">
+                            <tr>
+                                <td class="${data.sistem_electric_frenos_del ? "check-true" : "check-false"}">Frenos Del: ${data.sistem_electric_frenos_del ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.sistem_electric_tablero ? "check-true" : "check-false"}">Tablero: ${data.sistem_electric_tablero ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.sistem_electric_luz_cruce ? "check-true" : "check-false"}">Luz Cruce: ${data.sistem_electric_luz_cruce ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.sistem_electric_stop ? "check-true" : "check-false"}">Luz Stop: ${data.sistem_electric_stop ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td class="${data.sistem_electric_vidrio_electrico ? "check-true" : "check-false"}">Vidrio Eléc: ${data.sistem_electric_vidrio_electrico ? "<strong>SI</strong>" : "NO"}</td>
+                                <td class="${data.sistem_electric_aire_acondicionado ? "check-true" : "check-false"}">Aire Acond: ${data.sistem_electric_aire_acondicionado ? "<strong>SI</strong>" : "NO"}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="${data.sistem_electric_otro ? "check-true" : "check-false"}">Otro (Sist. Eléc): ${data.sistem_electric_otro ? "<strong>SI</strong>" : "NO"}</td>
                             </tr>
                         </table>
                 `;
@@ -180,14 +234,48 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="form-section">
-                    <h3>Checklist de Ingreso</h3>
+                    <h3>Checklist: Carrocería</h3>
                     <div class="checklist-form-grid">
-                        <label><input type="checkbox" name="carroceria_golpe" ${report.carroceria_golpe ? "checked" : ""}> Golpes</label>
-                        <label><input type="checkbox" name="carroceria_vidrio_roto" ${report.carroceria_vidrio_roto ? "checked" : ""}> Vidrios Rotos</label>
-                        <label><input type="checkbox" name="accesorios_alfombra" ${report.accesorios_alfombra ? "checked" : ""}> Alfombras</label>
+                        <label><input type="checkbox" name="carroceria_golpe" ${report.carroceria_golpe ? "checked" : ""}> Golpe</label>
+                        <label><input type="checkbox" name="carroceria_suelto" ${report.carroceria_suelto ? "checked" : ""}> Suelto</label>
+                        <label><input type="checkbox" name="carroceria_rayas" ${report.carroceria_rayas ? "checked" : ""}> Rayas</label>
+                        <label><input type="checkbox" name="carroceria_desconchado" ${report.carroceria_desconchado ? "checked" : ""}> Desconchado</label>
+                        <label><input type="checkbox" name="carroceria_vidrio_roto" ${report.carroceria_vidrio_roto ? "checked" : ""}> Vidrio Roto</label>
+                        <label><input type="checkbox" name="carroceria_falta_moldura" ${report.carroceria_falta_moldura ? "checked" : ""}> Falta Moldura</label>
+                        <label><input type="checkbox" name="carroceria_falta_faro" ${report.carroceria_falta_faro ? "checked" : ""}> Falta Faro</label>
+                        <label><input type="checkbox" name="carroceria_falta_accesorio" ${report.carroceria_falta_accesorio ? "checked" : ""}> Falta Accesorio</label>
+                        <label><input type="checkbox" name="carroceria_espejo_roto" ${report.carroceria_espejo_roto ? "checked" : ""}> Espejo Roto</label>
+                        <label><input type="checkbox" name="carroceria_falta_centro_copas" ${report.carroceria_falta_centro_copas ? "checked" : ""}> Falta Centro Copas</label>
+                        <label><input type="checkbox" name="carroceria_otro" ${report.carroceria_otro ? "checked" : ""}> Otro</label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Checklist: Accesorios</h3>
+                    <div class="checklist-form-grid">
+                        <label><input type="checkbox" name="accesorios_alfombra_delantera" ${report.accesorios_alfombra_delantera ? "checked" : ""}> Alfombra Del</label>
+                        <label><input type="checkbox" name="accesorios_alfombra_trasera" ${report.accesorios_alfombra_trasera ? "checked" : ""}> Alfombra Tras</label>
                         <label><input type="checkbox" name="accesorios_radio" ${report.accesorios_radio ? "checked" : ""}> Radio</label>
-                        <label><input type="checkbox" name="sistem_electric_frenos_del" ${report.sistem_electric_frenos_del ? "checked" : ""}> Frenos Del.</label>
+                        <label><input type="checkbox" name="accesorios_radio_reproductor" ${report.accesorios_radio_reproductor ? "checked" : ""}> Reproductor</label>
+                        <label><input type="checkbox" name="accesorios_antena_electrica" ${report.accesorios_antena_electrica ? "checked" : ""}> Antena Eléc</label>
+                        <label><input type="checkbox" name="accesorios_encendedor_cigarrillos" ${report.accesorios_encendedor_cigarrillos ? "checked" : ""}> Encendedor</label>
+                        <label><input type="checkbox" name="accesorios_triangulo_seguridad" ${report.accesorios_triangulo_seguridad ? "checked" : ""}> Triángulo Seg</label>
+                        <label><input type="checkbox" name="accesorios_gato" ${report.accesorios_gato ? "checked" : ""}> Gato</label>
+                        <label><input type="checkbox" name="accesorios_caucho_repuesto" ${report.accesorios_caucho_repuesto ? "checked" : ""}> Caucho Rep</label>
+                        <label><input type="checkbox" name="accesorios_otro" ${report.accesorios_otro ? "checked" : ""}> Otro</label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Checklist: Sistemas Eléctricos</h3>
+                    <div class="checklist-form-grid">
+                        <label><input type="checkbox" name="sistem_electric_frenos_del" ${report.sistem_electric_frenos_del ? "checked" : ""}> Frenos Del</label>
                         <label><input type="checkbox" name="sistem_electric_tablero" ${report.sistem_electric_tablero ? "checked" : ""}> Tablero</label>
+                        <label><input type="checkbox" name="sistem_electric_luz_cruce" ${report.sistem_electric_luz_cruce ? "checked" : ""}> Luz Cruce</label>
+                        <label><input type="checkbox" name="sistem_electric_stop" ${report.sistem_electric_stop ? "checked" : ""}> Luz Stop</label>
+                        <label><input type="checkbox" name="sistem_electric_vidrio_electrico" ${report.sistem_electric_vidrio_electrico ? "checked" : ""}> Vidrio Eléc</label>
+                        <label><input type="checkbox" name="sistem_electric_aire_acondicionado" ${report.sistem_electric_aire_acondicionado ? "checked" : ""}> Aire Acond</label>
+                        <label><input type="checkbox" name="sistem_electric_otro" ${report.sistem_electric_otro ? "checked" : ""}> Otro</label>
                     </div>
                 </div>
 
@@ -301,12 +389,38 @@ document.addEventListener("DOMContentLoaded", () => {
         status_reporte: formData.get("status_reporte"),
         factura_reporte: getOptionalString("factura_reporte"),
         factura_monto: getOptionalFloat("factura_monto"),
+        // CARROCERÍA
         carroceria_golpe: formData.get("carroceria_golpe") === "on",
+        carroceria_suelto: formData.get("carroceria_suelto") === "on",
+        carroceria_rayas: formData.get("carroceria_rayas") === "on",
+        carroceria_desconchado: formData.get("carroceria_desconchado") === "on",
         carroceria_vidrio_roto: formData.get("carroceria_vidrio_roto") === "on",
-        accesorios_alfombra: formData.get("accesorios_alfombra") === "on",
+        carroceria_falta_moldura: formData.get("carroceria_falta_moldura") === "on",
+        carroceria_falta_faro: formData.get("carroceria_falta_faro") === "on",
+        carroceria_falta_accesorio: formData.get("carroceria_falta_accesorio") === "on",
+        carroceria_espejo_roto: formData.get("carroceria_espejo_roto") === "on",
+        carroceria_falta_centro_copas: formData.get("carroceria_falta_centro_copas") === "on",
+        carroceria_otro: formData.get("carroceria_otro") === "on",
+        // ACCESORIOS
+        accesorios_alfombra_delantera: formData.get("accesorios_alfombra_delantera") === "on",
+        accesorios_alfombra_trasera: formData.get("accesorios_alfombra_trasera") === "on",
         accesorios_radio: formData.get("accesorios_radio") === "on",
+        accesorios_radio_reproductor: formData.get("accesorios_radio_reproductor") === "on",
+        accesorios_antena_electrica: formData.get("accesorios_antena_electrica") === "on",
+        accesorios_encendedor_cigarrillos: formData.get("accesorios_encendedor_cigarrillos") === "on",
+        accesorios_triangulo_seguridad: formData.get("accesorios_triangulo_seguridad") === "on",
+        accesorios_gato: formData.get("accesorios_gato") === "on",
+        accesorios_caucho_repuesto: formData.get("accesorios_caucho_repuesto") === "on",
+        accesorios_otro: formData.get("accesorios_otro") === "on",
+        // SISTEMA ELECTRICO
         sistem_electric_frenos_del: formData.get("sistem_electric_frenos_del") === "on",
         sistem_electric_tablero: formData.get("sistem_electric_tablero") === "on",
+        sistem_electric_luz_cruce: formData.get("sistem_electric_luz_cruce") === "on",
+        sistem_electric_stop: formData.get("sistem_electric_stop") === "on",
+        sistem_electric_vidrio_electrico: formData.get("sistem_electric_vidrio_electrico") === "on",
+        sistem_electric_aire_acondicionado: formData.get("sistem_electric_aire_acondicionado") === "on",
+        sistem_electric_otro: formData.get("sistem_electric_otro") === "on",
+
         observaciones: formData.get("observaciones"),
         servicios: servicios,
         repuestos: repuestos,
@@ -360,14 +474,48 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                     <div class="form-section">
-                        <h3>Checklist de Ingreso</h3>
+                        <h3>Checklist: Carrocería</h3>
                         <div class="checklist-form-grid">
-                            <label><input type="checkbox" name="carroceria_golpe"> Golpes en Carrocería</label>
-                            <label><input type="checkbox" name="carroceria_vidrio_roto"> Vidrios Rotos</label>
-                            <label><input type="checkbox" name="accesorios_alfombra"> Alfombras</label>
+                            <label><input type="checkbox" name="carroceria_golpe"> Golpe</label>
+                            <label><input type="checkbox" name="carroceria_suelto"> Suelto</label>
+                            <label><input type="checkbox" name="carroceria_rayas"> Rayas</label>
+                            <label><input type="checkbox" name="carroceria_desconchado"> Desconchado</label>
+                            <label><input type="checkbox" name="carroceria_vidrio_roto"> Vidrio Roto</label>
+                            <label><input type="checkbox" name="carroceria_falta_moldura"> Falta Moldura</label>
+                            <label><input type="checkbox" name="carroceria_falta_faro"> Falta Faro</label>
+                            <label><input type="checkbox" name="carroceria_falta_accesorio"> Falta Accesorio</label>
+                            <label><input type="checkbox" name="carroceria_espejo_roto"> Espejo Roto</label>
+                            <label><input type="checkbox" name="carroceria_falta_centro_copas"> Falta Centro Copas</label>
+                            <label><input type="checkbox" name="carroceria_otro"> Otro</label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Checklist: Accesorios</h3>
+                        <div class="checklist-form-grid">
+                            <label><input type="checkbox" name="accesorios_alfombra_delantera"> Alfombra Del</label>
+                            <label><input type="checkbox" name="accesorios_alfombra_trasera"> Alfombra Tras</label>
                             <label><input type="checkbox" name="accesorios_radio"> Radio</label>
-                            <label><input type="checkbox" name="sistem_electric_frenos_del"> Frenos Delanteros</label>
-                            <label><input type="checkbox" name="sistem_electric_tablero"> Tablero Eléctrico</label>
+                            <label><input type="checkbox" name="accesorios_radio_reproductor"> Reproductor</label>
+                            <label><input type="checkbox" name="accesorios_antena_electrica"> Antena Eléc</label>
+                            <label><input type="checkbox" name="accesorios_encendedor_cigarrillos"> Encendedor</label>
+                            <label><input type="checkbox" name="accesorios_triangulo_seguridad"> Triángulo Seg</label>
+                            <label><input type="checkbox" name="accesorios_gato"> Gato</label>
+                            <label><input type="checkbox" name="accesorios_caucho_repuesto"> Caucho Rep</label>
+                            <label><input type="checkbox" name="accesorios_otro"> Otro</label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Checklist: Sistemas Eléctricos</h3>
+                        <div class="checklist-form-grid">
+                            <label><input type="checkbox" name="sistem_electric_frenos_del"> Frenos Del</label>
+                            <label><input type="checkbox" name="sistem_electric_tablero"> Tablero</label>
+                            <label><input type="checkbox" name="sistem_electric_luz_cruce"> Luz Cruce</label>
+                            <label><input type="checkbox" name="sistem_electric_stop"> Luz Stop</label>
+                            <label><input type="checkbox" name="sistem_electric_vidrio_electrico"> Vidrio Eléc</label>
+                            <label><input type="checkbox" name="sistem_electric_aire_acondicionado"> Aire Acond</label>
+                            <label><input type="checkbox" name="sistem_electric_otro"> Otro</label>
                         </div>
                     </div>
 
@@ -454,12 +602,38 @@ document.addEventListener("DOMContentLoaded", () => {
           telefono_cliente: parseInt(formData.get("telefono_cliente")),
           factura_reporte: getOptionalString("factura_reporte"),
           factura_monto: getOptionalNumber("factura_monto"),
+          // CARROCERÍA
           carroceria_golpe: formData.get("carroceria_golpe") === "on",
+          carroceria_suelto: formData.get("carroceria_suelto") === "on",
+          carroceria_rayas: formData.get("carroceria_rayas") === "on",
+          carroceria_desconchado: formData.get("carroceria_desconchado") === "on",
           carroceria_vidrio_roto: formData.get("carroceria_vidrio_roto") === "on",
-          accesorios_alfombra: formData.get("accesorios_alfombra") === "on",
+          carroceria_falta_moldura: formData.get("carroceria_falta_moldura") === "on",
+          carroceria_falta_faro: formData.get("carroceria_falta_faro") === "on",
+          carroceria_falta_accesorio: formData.get("carroceria_falta_accesorio") === "on",
+          carroceria_espejo_roto: formData.get("carroceria_espejo_roto") === "on",
+          carroceria_falta_centro_copas: formData.get("carroceria_falta_centro_copas") === "on",
+          carroceria_otro: formData.get("carroceria_otro") === "on",
+          // ACCESORIOS
+          accesorios_alfombra_delantera: formData.get("accesorios_alfombra_delantera") === "on",
+          accesorios_alfombra_trasera: formData.get("accesorios_alfombra_trasera") === "on",
           accesorios_radio: formData.get("accesorios_radio") === "on",
+          accesorios_radio_reproductor: formData.get("accesorios_radio_reproductor") === "on",
+          accesorios_antena_electrica: formData.get("accesorios_antena_electrica") === "on",
+          accesorios_encendedor_cigarrillos: formData.get("accesorios_encendedor_cigarrillos") === "on",
+          accesorios_triangulo_seguridad: formData.get("accesorios_triangulo_seguridad") === "on",
+          accesorios_gato: formData.get("accesorios_gato") === "on",
+          accesorios_caucho_repuesto: formData.get("accesorios_caucho_repuesto") === "on",
+          accesorios_otro: formData.get("accesorios_otro") === "on",
+          // SISTEMA ELECTRICO
           sistem_electric_frenos_del: formData.get("sistem_electric_frenos_del") === "on",
           sistem_electric_tablero: formData.get("sistem_electric_tablero") === "on",
+          sistem_electric_luz_cruce: formData.get("sistem_electric_luz_cruce") === "on",
+          sistem_electric_stop: formData.get("sistem_electric_stop") === "on",
+          sistem_electric_vidrio_electrico: formData.get("sistem_electric_vidrio_electrico") === "on",
+          sistem_electric_aire_acondicionado: formData.get("sistem_electric_aire_acondicionado") === "on",
+          sistem_electric_otro: formData.get("sistem_electric_otro") === "on",
+
           observaciones: formData.get("observaciones"),
           servicios: servicios,
           repuestos: repuestos,

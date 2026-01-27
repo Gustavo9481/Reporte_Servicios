@@ -222,10 +222,10 @@ class Reporte(BaseModel):
     sistem_electric_luz_cruce: bool = Field(
         False, description="Falla la luz de cruce del vehículo?"
     )
-    sistem_electric_luz_stop: bool = Field(
+    sistem_electric_stop: bool = Field(
         False, description="Falla la luz de stop del vehículo?"
     )
-    sistem_electric_luz_vidrio_electrico: bool = Field(
+    sistem_electric_vidrio_electrico: bool = Field(
         False, description="Falla la luz del vidrio eléctrico del vehículo?"
     )
     sistem_electric_aire_acondicionado: bool = Field(
