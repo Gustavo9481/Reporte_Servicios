@@ -1,5 +1,6 @@
 # MODULO: data
 # Gestión de conexión a la base de datos.
+
 from typing import Generator
 
 from sqlalchemy import create_engine
@@ -18,6 +19,7 @@ Base = declarative_base()
 
 
 def get_db() -> Generator:
+    """Gestiona la conexión a DB"""
     db = SessionLocal()
     try:
         yield db
@@ -25,7 +27,8 @@ def get_db() -> Generator:
         db.close()
 
 
-def create_db_tables():
+def create_db_tables() -> None:
+    """Crea las tablas en la DB"""
     from . import models
 
     Base.metadata.create_all(bind=engine)

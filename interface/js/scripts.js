@@ -1,4 +1,5 @@
-// interface/js/scripts.js
+// MÓDULO: interface/js/scripts.js
+
 document.addEventListener("DOMContentLoaded", () => {
   // Referencias a los elementos del DOM
   const btnNuevoReporte = document.getElementById("btnNuevoReporte");
@@ -13,6 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
     contentArea.innerHTML = htmlContent;
   };
 
+  // --- FUNCIÓN PARA OBTENER EL ICONO DE ESTADO ---
+  const getStatusIcon = (status) => {
+    return status === "activa" ? "✔" : "✖";
+  };
+
   // --- FUNCIÓN PARA RENDERIZAR LA LISTA DE REPORTES EN UNA TABLA ---
   const renderReportList = (reports) => {
     let html = "<h2>Listado de Reportes</h2>";
@@ -24,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     html += '<table class="reports-table">';
     html +=
-      "<thead><tr><th>ID</th><th>Placa</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead>";
+      '<thead><tr><th>ID</th><th>Placa</th><th>Cliente</th><th>Fecha</th><th class="text-right">Total</th><th class="text-center">Estado</th><th>Acciones</th></tr></thead>';
     html += "<tbody>";
     reports.forEach((report) => {
       html += `
@@ -33,8 +39,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     <td>${report.placa}</td>
                     <td>${report.nombre_cliente}</td>
                     <td>${report.fecha}</td>
-                    <td>${(report.total_general || 0).toFixed(2)}</td>
-                    <td><span class="status ${report.status_reporte}">${report.status_reporte}</span></td>
+                    <td class="text-right">${(report.total_general || 0).toFixed(2)}</td>
+                     <td class="text-center"><span class="status ${report.status_reporte}" title="${report.status_reporte}">${getStatusIcon(report.status_reporte)}</span></td>
                     <td>
                         <button class="btn-ver-detalles" data-id="${report.id_reporte}">Ver Detalles</button>
                     </td>
@@ -71,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <tr><th>Modelo</th><td>${data.modelo}</td></tr>
                             <tr><th>Color</th><td>${data.color}</td></tr>
                             <tr><th>Fecha</th><td>${data.fecha}</td></tr>
-                            <tr><th>Estado</th><td><span class="status ${data.status_reporte}">${data.status_reporte}</span></td></tr>
+                            <tr><th class="text-center">Estado</th> <td class="text-center"><span class="status ${data.status_reporte}" title="${data.status_reporte}">${getStatusIcon(data.status_reporte)}</span></td></tr>
                             <tr><th>Factura Reporte</th><td>${data.factura_reporte || "N/A"}</td></tr>
                             <tr><th>Monto Factura</th><td>${data.factura_monto !== null ? data.factura_monto : "N/A"}</td></tr>
                         </table>
@@ -83,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <tr><th>Teléfono</th><td>${data.telefono_cliente}</td></tr>
                         </table>
 
-                        <h3>Checklist: Carrocería</h3>
+                        <h3>Carrocería</h3>
                         <table class="details-table checklist-table">
                             <tr>
                                 <td class="${data.carroceria_golpe ? "check-true" : "check-false"}">Golpe: ${data.carroceria_golpe ? "<strong>SI</strong>" : "NO"}</td>
@@ -110,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </tr>
                         </table>
 
-                        <h3>Checklist: Accesorios</h3>
+                        <h3>Accesorios</h3>
                         <table class="details-table checklist-table">
                             <tr>
                                 <td class="${data.accesorios_alfombra_delantera ? "check-true" : "check-false"}">Alfombra Del: ${data.accesorios_alfombra_delantera ? "<strong>SI</strong>" : "NO"}</td>
@@ -134,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             </tr>
                         </table>
 
-                        <h3>Checklist: Sistemas Eléctricos</h3>
+                        <h3>Sistemas Eléctricos</h3>
                         <table class="details-table checklist-table">
                             <tr>
                                 <td class="${data.sistem_electric_frenos_del ? "check-true" : "check-false"}">Frenos Del: ${data.sistem_electric_frenos_del ? "<strong>SI</strong>" : "NO"}</td>
@@ -163,18 +169,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (data.servicios && data.servicios.length > 0) {
           html +=
-            '<h3>Servicios Realizados</h3><table class="details-table"><thead><tr><th>Item</th><th>Descripción</th><th>Presupuesto</th></tr></thead><tbody>';
+            '<h3>Servicios Realizados</h3><table class="details-table"><thead><tr><th>Item</th><th>Descripción</th><th class="text-right">Presupuesto</th></tr></thead><tbody>';
           data.servicios.forEach((s) => {
-            html += `<tr><td>${s.item}</td><td>${s.descripcion}</td><td>${s.presupuesto.toFixed(2)}</td></tr>`;
+            html += `<tr><td>${s.item}</td><td>${s.descripcion}</td><td class="text-right">${s.presupuesto.toFixed(2)}</td></tr>`;
           });
           html += "</tbody></table>";
         }
 
         if (data.repuestos && data.repuestos.length > 0) {
           html +=
-            '<h3>Repuestos Utilizados</h3><table class="details-table"><thead><tr><th>Cantidad</th><th>Descripción</th><th>Presupuesto</th></tr></thead><tbody>';
+            '<h3>Repuestos Utilizados</h3><table class="details-table"><thead><tr><th>Cantidad</th><th>Descripción</th><th class="text-right">Presupuesto</th></tr></thead><tbody>';
           data.repuestos.forEach((r) => {
-            html += `<tr><td>${r.cantidad}</td><td>${r.descripcion}</td><td>${r.presupuesto.toFixed(2)}</td></tr>`;
+            html += `<tr><td>${r.cantidad}</td><td>${r.descripcion}</td><td class="text-right">${r.presupuesto.toFixed(2)}</td></tr>`;
           });
           html += "</tbody></table>";
         }
@@ -182,14 +188,17 @@ document.addEventListener("DOMContentLoaded", () => {
         html += `
                     <h3>Resumen de Presupuesto</h3>
                     <table class="details-table summary-table">
-                        <tr><th>Total Servicios</th><td>${(data.total_servicios || 0).toFixed(2)}</td></tr>
-                        <tr><th>Total Repuestos</th><td>${(data.total_repuestos || 0).toFixed(2)}</td></tr>
-                        <tr><th>Total General</th><td>${(data.total_general || 0).toFixed(2)}</td></tr>
+                        <thead><tr><th>Concepto</th><th class="text-right">Monto</th></tr></thead>
+                        <tbody>
+                            <tr><td>Total Servicios</td><td class="text-right">${(data.total_servicios || 0).toFixed(2)}</td></tr>
+                            <tr><td>Total Repuestos</td><td class="text-right">${(data.total_repuestos || 0).toFixed(2)}</td></tr>
+                            <tr><td><strong>Total General</strong></td><td class="text-right"><strong>${(data.total_general || 0).toFixed(2)}</strong></td></tr>
+                        </tbody>
                     </table>
                 `;
 
         html += `<div class="form-actions" style="text-align: right; margin-top: 20px;">`;
-        html += `<button id="btnVolverLista" style="background-color: #6c757d;">Volver a la lista</button>`;
+        html += `<button id="btnVolverLista">Volver a la lista</button>`;
         html += `<button id="btnEditarReporte" class="btn-editar">Editar Reporte</button>`;
         html += `<a href="/reportes/${reporteId}/pdf" target="_blank" class="btn-generar-pdf">Generar PDF</a>`;
         html += `</div></div>`;
@@ -235,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="form-section">
-                    <h3>Checklist: Carrocería</h3>
+                    <h3>Carrocería</h3>
                     <div class="checklist-form-grid">
                         <label><input type="checkbox" name="carroceria_golpe" ${report.carroceria_golpe ? "checked" : ""}> Golpe</label>
                         <label><input type="checkbox" name="carroceria_suelto" ${report.carroceria_suelto ? "checked" : ""}> Suelto</label>
@@ -252,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="form-section">
-                    <h3>Checklist: Accesorios</h3>
+                    <h3>Accesorios</h3>
                     <div class="checklist-form-grid">
                         <label><input type="checkbox" name="accesorios_alfombra_delantera" ${report.accesorios_alfombra_delantera ? "checked" : ""}> Alfombra Del</label>
                         <label><input type="checkbox" name="accesorios_alfombra_trasera" ${report.accesorios_alfombra_trasera ? "checked" : ""}> Alfombra Tras</label>
@@ -268,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="form-section">
-                    <h3>Checklist: Sistemas Eléctricos</h3>
+                    <h3>Sistemas Eléctricos</h3>
                     <div class="checklist-form-grid">
                         <label><input type="checkbox" name="sistem_electric_frenos_del" ${report.sistem_electric_frenos_del ? "checked" : ""}> Frenos Del</label>
                         <label><input type="checkbox" name="sistem_electric_tablero" ${report.sistem_electric_tablero ? "checked" : ""}> Tablero</label>
@@ -475,7 +484,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                     <div class="form-section">
-                        <h3>Checklist: Carrocería</h3>
+                        <h3>Carrocería</h3>
                         <div class="checklist-form-grid">
                             <label><input type="checkbox" name="carroceria_golpe"> Golpe</label>
                             <label><input type="checkbox" name="carroceria_suelto"> Suelto</label>
@@ -492,7 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                     <div class="form-section">
-                        <h3>Checklist: Accesorios</h3>
+                        <h3>Accesorios</h3>
                         <div class="checklist-form-grid">
                             <label><input type="checkbox" name="accesorios_alfombra_delantera"> Alfombra Del</label>
                             <label><input type="checkbox" name="accesorios_alfombra_trasera"> Alfombra Tras</label>
@@ -508,7 +517,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                     <div class="form-section">
-                        <h3>Checklist: Sistemas Eléctricos</h3>
+                        <h3>Sistemas Eléctricos</h3>
                         <div class="checklist-form-grid">
                             <label><input type="checkbox" name="sistem_electric_frenos_del"> Frenos Del</label>
                             <label><input type="checkbox" name="sistem_electric_tablero"> Tablero</label>

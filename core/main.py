@@ -19,6 +19,7 @@ from data import models
 from data.database import create_db_tables, get_db
 
 
+# Verificación de que las tablas esten creadas al iniciar la app.
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -44,14 +45,14 @@ app = FastAPI(
     },
 )
 
-# Montado de la carpeta 'interface'
-# todos sus archivos estarán disponibles bajo la ruta '/static/'
+# Montado de la carpeta 'interface'.
+# todos sus archivos estarán disponibles bajo la ruta '/static/'.
 app.mount("/interface", StaticFiles(directory="interface"), name="interface")
 app.mount("/static", StaticFiles(directory="interface"), name="static")
 
 
 # .. ..................................................... endpoint -> root ..󰌠
-# ENDPOINT: entrada a la app
+# Entrada a la app
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)  # oculta de /docs
 async def serve_index_html():
     """Sirve el archivo HTML a la página de inicio"""
@@ -61,14 +62,16 @@ async def serve_index_html():
     return html_file_path.read_text()
 
 
-# ENDPOINT: mensaje de conexión de la api.
+# .. .............................................. endpoint -> /api/status ..󰌠
+# Mensaje de conexión de la api.
 @app.get("/api/status")
 def get_api_status():
     """Test para raíz de la api, sirve un mensaje"""
     return {"API -> Reportes de taller | Bienvenido !!"}
 
 
-# ENDPOINT: creación de nuevos reportes
+# .. ............................................... endpoint -> /reportes/ ..󰌠
+# Creación de nuevos reportes.
 @app.post(
     "/reportes/",
     response_model=models.Reporte,
@@ -76,13 +79,16 @@ def get_api_status():
     tags=["Reportes"],
 )
 def create_reporte(reporte: models.Reporte, db: Session = Depends(get_db)):
-    """Crea un nuevo reporte en la base de datos"""
-    # 1. calcular totales
+    """Crea un nuevo reporte en la base de datos junto a los totales de
+    Servicios, Repuestos y Total General.
+    """
+    # 1. calcular totales de Servicios, Repuestos y Total General.
     total_servicios = sum(s.presupuesto for s in reporte.servicios)
     total_repuestos = sum(r.presupuesto for r in reporte.repuestos)
     total_general = total_servicios + total_repuestos
 
-    # 2. crear el objeto principal 'ReportesDB' a partir del modelo pydantic, incluyendo totales
+    # 2. crear el objeto principal 'ReportesDB' a partir del modelo pydantic.
+    # incluye totales de Servicios y Repuestos.
     reporte_data = reporte.dict(exclude={"servicios", "repuestos"})
     reporte_data.update(
         {
@@ -93,24 +99,25 @@ def create_reporte(reporte: models.Reporte, db: Session = Depends(get_db)):
     )
     reporte_db = models.ReportesDB(**reporte_data)
 
-    # 3. crear los objetos 'ServiciosDB' y 'RepuestosDB' y los agrega a la creación
+    # 3. crear los objetos 'ServiciosDB' y 'RepuestosDB' y los agrega a la creación.
     for servicio_in in reporte.servicios:
         reporte_db.servicios.append(models.ServiciosDB(**servicio_in.dict()))
 
     for repuesto_in in reporte.repuestos:
         reporte_db.repuestos.append(models.RepuestosDB(**repuesto_in.dict()))
 
-    # 4. agregar el reporte a la sesión de la base de datos y guardar
+    # 4. agregar el reporte a la sesión de la base de datos y guardar.
     db.add(reporte_db)
     db.commit()
 
-    # 5. refrescar el objeto para obtener los IDs generados por la base de datos
+    # 5. refrescar el objeto para obtener los IDs generados por la base de datos.
     db.refresh(reporte_db)
 
     return reporte_db
 
 
-# ENDPOINT: lista de reportes existentes
+# .. ............................................... endpoint -> /reportes/ ..󰌠
+# lista de reportes existentes
 @app.get("/reportes/", response_model=List[models.Reporte], tags=["Reportes"])
 def lista_reportes(db: Session = Depends(get_db)):
     """Lista de reportes existentes"""
@@ -123,7 +130,8 @@ def lista_reportes(db: Session = Depends(get_db)):
     return reportes
 
 
-# ENDPOINT: filtro de búsqueda por id de orden
+# .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
+# Filtro de búsqueda por id de orden.
 @app.get("/reportes/{reporte_id}", response_model=models.Reporte, tags=["Reportes"])
 def leer_reporte(reporte_id: int, db: Session = Depends(get_db)):
     """Lee un reporte en específoco por id"""
@@ -142,7 +150,8 @@ def leer_reporte(reporte_id: int, db: Session = Depends(get_db)):
     return reporte
 
 
-# ENDPOINT: filtro de búsqueda por cédula cliente.
+# .. ....................... endpoint -> /reportes/cliente/{cedula_cliente} ..󰌠
+# Filtro de búsqueda por cédula cliente.
 @app.get(
     "/reportes/cliente/{cedula_cliente}",
     response_model=List[models.Reporte],
@@ -166,7 +175,8 @@ def find_cedula(cedula_cliente: int, db: Session = Depends(get_db)):
     return reportes
 
 
-# ENDPOINT: filtro de búsqueda por nombre de cliente.
+# .. ........................ endpoint -> /reportes/cliente/nombre/{nombre} ..󰌠
+# Filtro de búsqueda por nombre de cliente.
 @app.get(
     "/reportes/cliente/nombre/{nombre}",
     response_model=List[models.Reporte],
@@ -184,13 +194,15 @@ def find_nombre(nombre: str, db: Session = Depends(get_db)):
 
     if not reportes:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Nombre de cliente no encontrado"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Nombre de cliente no encontrado",
         )
 
     return reportes
 
 
-# ENDPOINT: filtro de búsqueda por teléfono de cliente.
+# .. .................... endpoint -> /reportes/cliente/telefono/{telefono} ..󰌠
+# Filtro de búsqueda por teléfono de cliente.
 @app.get(
     "/reportes/cliente/telefono/{telefono}",
     response_model=List[models.Reporte],
@@ -214,7 +226,8 @@ def find_telefono(telefono: int, db: Session = Depends(get_db)):
     return reportes
 
 
-# ENDPOINT: filtro de búsqueda por placa de vehículo.
+# .. .................................. endpoint -> /reportes/placa/{placa} ..󰌠
+# Filtro de búsqueda por placa de vehículo.
 @app.get(
     "/reportes/placa/{placa}",
     response_model=List[models.Reporte],
@@ -232,19 +245,21 @@ def find_placa(placa: str, db: Session = Depends(get_db)):
 
     if not reportes:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="No se encontraron reportes para esta placa"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No se encontraron reportes para esta placa",
         )
 
     return reportes
 
 
-# ENDPOINT: edición de un registro
+# .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
+# Edición de un registro
 @app.put("/reportes/{reporte_id}", response_model=models.Reporte, tags=["Reportes"])
 def update_reporte(
     reporte_id: int, reporte_update: models.Reporte, db: Session = Depends(get_db)
 ):
     """Actuliza los datos de un reporte filtrado por id"""
-    # 1. filtrar el reporte a actualizar
+    # filtrado del reporte a actualizar.
     reporte_db = (
         db.query(models.ReportesDB)
         .filter(models.ReportesDB.id_reporte == reporte_id)
@@ -255,11 +270,11 @@ def update_reporte(
             status_code=status.HTTP_404_NOT_FOUND, detail="Reporte no encontrado"
         )
 
-    # 2. calcular los nuevos totales
+    # cálculo de totales de servicios y repuestos.
     total_servicios = sum(s.presupuesto for s in reporte_update.servicios)
     total_repuestos = sum(r.presupuesto for r in reporte_update.repuestos)
 
-    # 3. actualizar los campos del reporte, incluyendo los totales
+    # ctualización de los campos del reporte, incluyendo los totales.
     update_data = reporte_update.dict(
         exclude_unset=True, exclude={"servicios", "repuestos"}
     )
@@ -269,7 +284,7 @@ def update_reporte(
     for key, value in update_data.items():
         setattr(reporte_db, key, value)
 
-    # 4. actualizar servicios y repuestos (método simple: borrar y recrear)
+    # actualización de servicios y repuestos (método simple: borrar y recrear).
     reporte_db.servicios = []
     reporte_db.repuestos = []
     for servicio_in in reporte_update.servicios:
@@ -277,14 +292,15 @@ def update_reporte(
     for repuesto_in in reporte_update.repuestos:
         reporte_db.repuestos.append(models.RepuestosDB(**repuesto_in.dict()))
 
-    # 5. guardar cambios, refrescar y devolver el objeto actualizado.
+    # guardar cambios, refrescar y devolver el objeto actualizado.
     db.commit()
     db.refresh(reporte_db)
 
     return reporte_db
 
 
-# ENDPOINT: borrar un registro
+# .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
+# Eliminar un registro
 @app.delete("/reportes/{reporte_id}", status_code=status.HTTP_200_OK, tags=["Reportes"])
 def delete_reporte(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, str]:
     """Elimina un registro"""
@@ -305,7 +321,8 @@ def delete_reporte(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, 
     return {"message": f"Reporte con ID {reporte_id} eliminado exitosamente"}
 
 
-# --- NUEVO ENDPOINT PARA GENERAR PDF ---
+# .. ............................... endpoint -> /reportes/{reporte_id}/pdf ..󰌠
+# Generación de reporte en formato pdf.
 @app.get("/reportes/{reporte_id}/pdf", tags=["Reportes"])
 async def get_reporte_pdf(reporte_id: int, db: Session = Depends(get_db)):
     """
@@ -324,7 +341,7 @@ async def get_reporte_pdf(reporte_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND, detail="Reporte no encontrado"
         )
 
-    # Generar el PDF
+    # Generar el PDF.
     pdf_buffer = generate_report_pdf(reporte)
     pdf_buffer.seek(0)  # Asegurarse de que el buffer esté al principio
 

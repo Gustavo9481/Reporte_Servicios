@@ -1,5 +1,6 @@
 # MODULO: data
 # Modelos para base de datos
+
 from datetime import date
 from typing import List, Literal, Optional
 

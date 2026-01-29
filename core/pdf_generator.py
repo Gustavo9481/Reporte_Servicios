@@ -1,5 +1,6 @@
 # MODULO: core/pdf_generator.py
 # Generador de PDFs para Reporte_Servicios.
+
 from io import BytesIO
 
 from reportlab.lib import colors
@@ -85,7 +86,7 @@ def generate_report_pdf(report_data):
 
     # --- Título ---
     story.append(
-        Paragraph(f"Reporte de Taller #{report_data.id_reporte}", styles["h1"])
+        Paragraph(f"Reporte de Servicio -> #{report_data.id_reporte}", styles["h1"])
     )
     story.append(Spacer(1, 0.04 * inch))
 
