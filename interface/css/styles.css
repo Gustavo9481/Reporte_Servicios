@@ -1,5 +1,14 @@
 /* MÓDULO: interface/css/styles.css */
 
+:root {
+    --blue-color: #4361ee;
+    --red-color: #c1121f;
+    --green-color: #2a9d8f;
+    --grey-color: #333; /* Color de texto principal */
+    --white-color: white;
+    --black-color: black;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 20px;

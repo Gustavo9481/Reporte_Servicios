@@ -549,6 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
 
                     <div class="form-actions">
+                        <button type="button" id="btnCancelarNuevoReporte" class="btn-remove">Cancelar</button>
                         <button type="submit">Guardar Reporte</button>
                     </div>
                 </form>
@@ -664,6 +665,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
           alert(`Error de red: ${error.message}`);
         }
+      });
+
+      document.getElementById("btnCancelarNuevoReporte").addEventListener("click", () => {
+          showContent(""); // Limpia el área de contenido
+          btnListaReportes.click(); // Vuelve a la pantalla principal
       });
     };
     renderNewReportForm();
