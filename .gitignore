@@ -1,0 +1,32 @@
+# Git ignore files
+# Compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+
+# Environments
+.venv/
+venv/
+env/
+.env/
+
+# Editor/IDE files
+.idea/
+.vscode/
+*.swp
+*~
+.DS_Store
+
+# FastAPI/Uvicorn specific
+uv.lock
+
+# Database
+*.db
+*.sqlite3
+/data/dB.sqlite3
+
+# Logs and temporary files
+*.log
+*.tmp
