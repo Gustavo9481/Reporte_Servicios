@@ -14,10 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contentArea.innerHTML = htmlContent;
   };
 
-  // --- FUNCIÓN PARA OBTENER EL ICONO DE ESTADO ---
-  const getStatusIcon = (status) => {
-    return status === "activa" ? "✔" : "✖";
-  };
+
 
   // --- FUNCIÓN PARA RENDERIZAR LA LISTA DE REPORTES EN UNA TABLA ---
   const renderReportList = (reports) => {
@@ -40,9 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     <td>${report.nombre_cliente}</td>
                     <td>${report.fecha}</td>
                     <td class="text-right">${(report.total_general || 0).toFixed(2)}</td>
-                     <td class="text-center"><span class="status ${report.status_reporte}" title="${report.status_reporte}">${getStatusIcon(report.status_reporte)}</span></td>
+                     <td class="text-center"><app-status-badge status="${report.status_reporte}"></app-status-badge></td>
                     <td>
-                        <button class="btn-ver-detalles" data-id="${report.id_reporte}">Ver Detalles</button>
+                        <app-button-view-details data-id="${report.id_reporte}">Ver Detalles</app-button-view-details>
                     </td>
                 </tr>
             `;
@@ -51,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showContent(html);
 
     // Añadir event listeners a los nuevos botones "Ver Detalles"
-    document.querySelectorAll(".btn-ver-detalles").forEach((button) => {
+    document.querySelectorAll("app-button-view-details").forEach((button) => {
       button.addEventListener("click", (event) => {
         const reporteId = event.target.dataset.id;
         showReportDetails(reporteId);
@@ -77,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <tr><th>Modelo</th><td>${data.modelo}</td></tr>
                             <tr><th>Color</th><td>${data.color}</td></tr>
                             <tr><th>Fecha</th><td>${data.fecha}</td></tr>
-                            <tr><th class="text-center">Estado</th> <td class="text-center"><span class="status ${data.status_reporte}" title="${data.status_reporte}">${getStatusIcon(data.status_reporte)}</span></td></tr>
+                            <tr><th class="text-center">Estado</th> <td class="text-center"><app-status-badge status="${data.status_reporte}"></app-status-badge></td></tr>
                             <tr><th>Factura Reporte</th><td>${data.factura_reporte || "N/A"}</td></tr>
                             <tr><th>Monto Factura</th><td>${data.factura_monto !== null ? data.factura_monto : "N/A"}</td></tr>
                         </table>
@@ -682,7 +679,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2>Consultar Reporte por ID</h2>
             <div class="form-container">
                 <input type="text" id="reporteIdInput" placeholder="Introduce el ID del reporte" />
-                <button id="btnBuscarReporte">Buscar</button>
+                <app-button-blue id="btnBuscarReporte">Buscar</app-button-blue>
             </div>
         `;
     showContent(html);
@@ -701,7 +698,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2>Consultar Reportes por Placa de Vehículo</h2>
             <div class="form-container">
                 <input type="text" id="placaInput" placeholder="Introduce la placa (ej: ABC12D)" />
-                <button id="btnBuscarPlaca">Buscar</button>
+                <app-button-blue id="btnBuscarPlaca">Buscar</app-button-blue>
             </div>
         `;
     showContent(html);
@@ -735,7 +732,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <input type="number" id="cedulaClienteInput" placeholder="Buscar por Cédula" />
                 <input type="text" id="nombreClienteInput" placeholder="Buscar por Nombre" />
                 <input type="number" id="telefonoClienteInput" placeholder="Buscar por Teléfono" />
-                <button id="btnBuscarCliente" style="margin-top: 10px;">Buscar</button>
+                <app-button-blue id="btnBuscarCliente" style="margin-top: 10px;">Buscar</app-button-blue>
             </div>
         `;
     showContent(html);
