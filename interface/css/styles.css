@@ -20,21 +20,7 @@ h1 {
     color: #3a56d4;
 }
 
-button {
-    background-color: #4361ee;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
 
-button:hover {
-    background-color: #3a56d4;
-}
 
 #contentArea {
     border-top: 1px solid #eee;
@@ -73,12 +59,7 @@ button:hover {
     margin-bottom: 30px;
 }
 
-.menu-options button {
-    padding: 8px 14px;
-    font-size: 13px;
-    min-width: 140px;
-    width: auto;
-}
+
 
 /* --- ESTILOS PARA LA TABLA DE REPORTES --- */
 .reports-table {
@@ -102,11 +83,10 @@ button:hover {
 .reports-table tbody tr:hover {
     background-color: #f1f1f1;
 }
-.reports-table td button {
+.reports-table td app-button-blue,
+.reports-table td app-button-red,
+.reports-table td app-button-green {
     margin-right: 5px;
-    padding: 4px 8px;
-    font-size: 12px;
-    min-width: auto;
 }
 .reports-table .btn-ver-detalles {
     background-color: #2a9d8f;
@@ -187,14 +167,7 @@ button:hover {
 .status.anulada {
     background-color: #c1121f;
 }
-#btnVolverLista {
-    margin-top: 25px;
-    background-color: #4361ee;
-    color: white;
-}
-#btnVolverLista:hover {
-    background-color: #3a56d4;
-}
+
 
 p.details-text {
     background-color: #f8f9fa;
@@ -288,38 +261,16 @@ p.details-text {
 .dynamic-item input:first-child {
     max-width: 80px;
 }
-.btn-add {
-    background-color: #17a2b8;
-    min-width: auto;
-    font-size: 13px;
-    padding: 6px 12px;
-}
-.btn-add:hover {
-    background-color: #138496;
-}
-.btn-remove {
-    background-color: #c1121f;
-    min-width: auto;
-    padding: 4px 8px;
-    font-size: 12px;
-}
-.btn-remove:hover {
-    background-color: #9a0e19;
-}
+
 .form-actions {
     text-align: right;
 }
-.form-actions button {
-    padding: 8px 14px;
-    font-size: 13px;
+.form-actions app-button-blue,
+.form-actions app-button-red,
+.form-actions app-button-green {
     min-width: 140px;
 }
-.form-actions button[type="submit"] {
-    background-color: #2a9d8f;
-}
-.form-actions button[type="submit"]:hover {
-    background-color: #217d72;
-}
+
 
 /* --- ESTILOS PARA EL CHECKLIST EN VISTA DE DETALLES --- */
 .details-table.checklist-table .check-true {
@@ -328,39 +279,7 @@ p.details-text {
 }
 
 /* --- ESTILOS PARA BOTONES DE ACCIÓN EN DETALLES --- */
-.btn-generar-pdf,
-.btn-editar {
-    display: inline-block;
-    color: white;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 13px;
-    min-width: 140px;
-    margin-top: 10px;
-    margin-left: 10px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    text-align: center;
-    box-sizing: border-box;
-}
 
-.btn-generar-pdf {
-    background-color: #c1121f; /* Rojo */
-}
-
-.btn-generar-pdf:hover {
-    background-color: #9a0e19;
-}
-
-.btn-editar {
-    background-color: #2a9d8f; /* Verde */
-}
-
-.btn-editar:hover {
-    background-color: #217d72;
-}
 
 /* --- ESTILO PARA FORZAR ANCHO COMPLETO EN TEXTAREA --- */
 .form-full-width-item {

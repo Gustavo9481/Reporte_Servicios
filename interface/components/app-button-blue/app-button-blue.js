@@ -10,6 +10,10 @@ class AppButtonBlue extends HTMLElement {
     render() {
         this.shadowRoot.innerHTML = `
             <style>
+                :host {
+                    display: inline-block;
+                    min-width: 140px;
+                }
                 button {
                     background-color: var(--blue-color, #4361ee);
                     color: var(--white-color, white);
@@ -19,6 +23,8 @@ class AppButtonBlue extends HTMLElement {
                     cursor: pointer;
                     font-size: 14px;
                     transition: background-color 0.3s ease;
+                    width: 100%;
+                    box-sizing: border-box;
                 }
 
                 button:hover {

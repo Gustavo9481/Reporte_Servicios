@@ -197,15 +197,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     </table>
                 `;
 
-        html += `<div class="form-actions" style="text-align: right; margin-top: 20px;">`;
-        html += `<button id="btnVolverLista">Volver a la lista</button>`;
-        html += `<button id="btnEditarReporte" class="btn-editar">Editar Reporte</button>`;
-        html += `<a href="/reportes/${reporteId}/pdf" target="_blank" class="btn-generar-pdf">Generar PDF</a>`;
+        html += `<div class="form-actions" style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">`;
+        html += `<app-button-blue id="btnVolverLista">Volver a la lista</app-button-blue>`;
+        html += `<app-button-green id="btnEditarReporte">Editar Reporte</app-button-green>`;
+        html += `<app-button-red id="btnGenerarPDF">Generar PDF</app-button-red>`;
         html += `</div></div>`;
         showContent(html);
 
         document.getElementById("btnVolverLista").addEventListener("click", () => btnListaReportes.click());
         document.getElementById("btnEditarReporte").addEventListener("click", () => renderEditReportForm(data));
+        document.getElementById("btnGenerarPDF").addEventListener("click", () => {
+            const pdfUrl = `/reportes/${reporteId}/pdf`;
+            window.open(pdfUrl, '_blank');
+        });
       } else {
         showContent(`<p>Error: ${data.detail}</p>`);
       }
@@ -299,18 +303,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="form-section">
                     <h3>Servicios</h3>
                     <div id="servicios-container"></div>
-                    <button type="button" id="btnAddServicio" class="btn-add">+ Añadir Servicio</button>
+                    <app-button-blue id="btnAddServicio">+ Añadir Servicio</app-button-blue>
                 </div>
 
                 <div class="form-section">
                     <h3>Repuestos</h3>
                     <div id="repuestos-container"></div>
-                    <button type="button" id="btnAddRepuesto" class="btn-add">+ Añadir Repuesto</button>
+                    <app-button-blue id="btnAddRepuesto">+ Añadir Repuesto</app-button-blue>
                 </div>
 
-                <div class="form-actions">
-                    <button type="button" id="btnCancelarEdicion">Cancelar</button>
-                    <button type="submit">Actualizar Reporte</button>
+                <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <app-button-red id="btnCancelarEdicion">Cancelar</app-button-red>
+                    <app-button-green type="submit">Actualizar Reporte</app-button-green>
                 </div>
             </form>
         `;
@@ -321,8 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const i = index + 1;
       const div = document.createElement("div");
       div.className = "dynamic-item";
-      div.innerHTML = `<input type="number" name="servicio_item_${i}" value="${s.item}" required><input type="text" name="servicio_desc_${i}" value="${s.descripcion}" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" value="${s.presupuesto}" required><button type="button" class="btn-remove">X</button>`;
-      serviciosContainer.appendChild(div);
+              div.innerHTML = `<input type="number" name="servicio_item_${i}" value="${s.item}" required><input type="text" name="servicio_desc_${i}" value="${s.descripcion}" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" value="${s.presupuesto}" required><app-button-red class="btn-remove">X</app-button-red>`;      serviciosContainer.appendChild(div);
       div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
     });
 
@@ -330,7 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const i = serviciosContainer.children.length + 1;
       const div = document.createElement("div");
       div.className = "dynamic-item";
-      div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><button type="button" class="btn-remove">X</button>`;
+      div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><app-button-red class="btn-remove">X</app-button-red>`;
       serviciosContainer.appendChild(div);
       div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
     });
@@ -340,8 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const i = index + 1;
       const div = document.createElement("div");
       div.className = "dynamic-item";
-      div.innerHTML = `<input type="number" name="repuesto_cant_${i}" value="${r.cantidad}" required><input type="text" name="repuesto_desc_${i}" value="${r.descripcion}" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" value="${r.presupuesto}" required><button type="button" class="btn-remove">X</button>`;
-      repuestosContainer.appendChild(div);
+              div.innerHTML = `<input type="number" name="repuesto_cant_${i}" value="${r.cantidad}" required><input type="text" name="repuesto_desc_${i}" value="${r.descripcion}" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" value="${r.presupuesto}" required><app-button-red class="btn-remove">X</app-button-red>`;      repuestosContainer.appendChild(div);
       div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
     });
 
@@ -349,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const i = repuestosContainer.children.length + 1;
       const div = document.createElement("div");
       div.className = "dynamic-item";
-      div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><button type="button" class="btn-remove">X</button>`;
+      div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><app-button-red class="btn-remove">X</app-button-red>`;
       repuestosContainer.appendChild(div);
       div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
     });
@@ -539,18 +541,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="form-section">
                         <h3>Servicios a Realizar</h3>
                         <div id="servicios-container"></div>
-                        <button type="button" id="btnAddServicio" class="btn-add">+ Añadir Servicio</button>
+                        <app-button-blue id="btnAddServicio">+ Añadir Servicio</app-button-blue>
                     </div>
 
                     <div class="form-section">
                         <h3>Repuestos a Utilizar</h3>
                         <div id="repuestos-container"></div>
-                        <button type="button" id="btnAddRepuesto" class="btn-add">+ Añadir Repuesto</button>
+                        <app-button-blue id="btnAddRepuesto">+ Añadir Repuesto</app-button-blue>
                     </div>
 
-                    <div class="form-actions">
-                        <button type="button" id="btnCancelarNuevoReporte" class="btn-remove">Cancelar</button>
-                        <button type="submit">Guardar Reporte</button>
+                    <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <app-button-red id="btnCancelarNuevoReporte">Cancelar</app-button-red>
+                        <app-button-green type="submit">Guardar Reporte</app-button-green>
                     </div>
                 </form>
             `;
@@ -560,7 +562,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const i = document.getElementById("servicios-container").children.length + 1;
         const div = document.createElement("div");
         div.className = "dynamic-item";
-        div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción del Servicio" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><button type="button" class="btn-remove">X</button>`;
+        div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción del Servicio" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><app-button-red class="btn-remove">X</app-button-red>`;
         document.getElementById("servicios-container").appendChild(div);
         div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
       });
@@ -569,7 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const i = document.getElementById("repuestos-container").children.length + 1;
         const div = document.createElement("div");
         div.className = "dynamic-item";
-        div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción del Repuesto" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><button type="button" class="btn-remove">X</button>`;
+        div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción del Repuesto" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><app-button-red class="btn-remove">X</app-button-red>`;
         document.getElementById("repuestos-container").appendChild(div);
         div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
       });
