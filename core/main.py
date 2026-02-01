@@ -17,6 +17,7 @@ from starlette.staticfiles import StaticFiles
 from core.pdf_generator import generate_report_pdf
 from data import models
 from data.database import create_db_tables, get_db
+from data.schemas import PaginatedReportsResponse
 
 
 # Verificación de que las tablas esten creadas al iniciar la app.
@@ -45,9 +46,7 @@ app = FastAPI(
     },
 )
 
-# Montado de la carpeta 'interface'.
-# todos sus archivos estarán disponibles bajo la ruta '/static/'.
-app.mount("/interface", StaticFiles(directory="interface"), name="interface")
+# Montado de la carpeta 'interface' como estáticos en '/static/'.
 app.mount("/static", StaticFiles(directory="interface"), name="static")
 
 
@@ -118,16 +117,20 @@ def create_reporte(reporte: models.Reporte, db: Session = Depends(get_db)):
 
 # .. ............................................... endpoint -> /reportes/ ..󰌠
 # lista de reportes existentes
-@app.get("/reportes/", response_model=List[models.Reporte], tags=["Reportes"])
-def lista_reportes(db: Session = Depends(get_db)):
-    """Lista de reportes existentes"""
+@app.get("/reportes/", response_model=PaginatedReportsResponse, tags=["Reportes"]) # <-- response_model cambiado
+def lista_reportes(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+    """Lista de reportes existentes, ordenados por los más recientes primero, con paginación"""
+    total_reportes = db.query(models.ReportesDB).count() # <-- Obtener total antes de paginar
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
         .options(joinedload(models.ReportesDB.repuestos))
+        .order_by(models.ReportesDB.id_reporte.desc())
+        .offset(skip) # Aplicar offset
+        .limit(limit) # Aplicar limit
         .all()
     )
-    return reportes
+    return {"total_count": total_reportes, "reports": reportes} # <-- Devolver diccionario
 
 
 # .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠

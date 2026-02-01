@@ -288,3 +288,14 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+
+/* Asegurar que los inputs en dynamic-item no aplasten el botón */
+.dynamic-item input {
+    flex-grow: 1; /* Permitir que los inputs crezcan */
+    flex-shrink: 1; /* Permitir que los inputs se encojan si es necesario */
+}
+
+/* Evitar que el botón de eliminar se comprima */
+.dynamic-item app-button-delete {
+    flex-shrink: 0; /* No permitir que el botón se encoja */
+}

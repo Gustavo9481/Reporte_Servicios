@@ -1,18 +1,15 @@
-// interface/components/app-status-badge/app-status-badge.js
+import { BaseComponent } from "../BaseComponent.js";
 
-class AppStatusBadge extends HTMLElement {
+class AppStatusBadge extends BaseComponent {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-        this._status = 'activa'; // Valor por defecto
+        this._status = this.getAttribute('status') || 'activa';
     }
 
-    // Define qué atributos deben ser observados para cambios
     static get observedAttributes() {
         return ['status'];
     }
 
-    // Se llama cuando un atributo observado cambia, se añade o se elimina
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'status' && oldValue !== newValue) {
             this._status = newValue;
@@ -21,10 +18,6 @@ class AppStatusBadge extends HTMLElement {
     }
 
     connectedCallback() {
-        // Asegurarse de que el renderizado inicial ocurra si el atributo ya está presente
-        if (this.hasAttribute('status')) {
-            this._status = this.getAttribute('status');
-        }
         this.render();
     }
 
@@ -35,27 +28,30 @@ class AppStatusBadge extends HTMLElement {
         const textContent = isActiva ? '✔' : '✖';
         const titleText = isActiva ? 'Activa' : 'Anulada';
 
-        this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    width: 24px; /* Pequeño */
-                    height: 24px; /* Pequeño */
-                    border-radius: 50%; /* Circular */
-                    background-color: ${backgroundColor};
-                    color: ${textColor};
-                    font-size: 14px;
-                    font-weight: bold;
-                    border: none; /* Sin bordes */
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-                    cursor: default;
-                    margin: 0; /* Asegurar que no haya márgenes externos */
-                }
-            </style>
-            <span title="${titleText}">${textContent}</span>
+        // Los estilos ahora se calculan dinámicamente y se aplican
+        const styles = `
+            :host {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background-color: ${backgroundColor};
+                color: ${textColor};
+                font-size: 14px;
+                font-weight: bold;
+                border: none;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+                cursor: default;
+                margin: 0;
+            }
         `;
+        
+        // Limpiamos el shadow root y aplicamos todo de nuevo para asegurar la actualización
+        this.shadowRoot.innerHTML = '';
+        this.applyStyles(styles);
+        this.shadowRoot.innerHTML += `<span title="${titleText}">${textContent}</span>`;
     }
 }
 
