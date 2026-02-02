@@ -4,29 +4,28 @@
     --blue-color: #4361ee;
     --red-color: #c1121f;
     --green-color: #2a9d8f;
-    --grey-color: #333; /* Color de texto principal */
+    --grey-color: #6c757d; /* Color de texto principal */
     --white-color: white;
     --black-color: black;
+    --backgorund-color: #cae9ff;
 }
 
 body {
     font-family: Arial, sans-serif;
     margin: 0; /* Eliminar margen del body */
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: var(--backgorund-color);
+    color: var(--grey-color);
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* Ocupar al menos el 100% del alto de la ventana */
 }
 
 h1 {
-    color: #3a56d4;
+    color: var(--blue-color);
 }
 
-
-
 #contentArea {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--grey-color);
     padding-top: 20px;
     margin-top: 20px;
     text-align: center;
@@ -35,8 +34,8 @@ h1 {
 #apiResponse {
     margin-top: 20px;
     padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #e9ecef;
+    border: 1px solid var(--grey-color);
+    background-color: var(--green-color);
     border-radius: 5px;
     white-space: pre-wrap;
     text-align: left;
@@ -62,8 +61,6 @@ h1 {
     margin-top: 20px;
     margin-bottom: 30px;
 }
-
-
 
 /* --- ESTILOS PARA LA TABLA DE REPORTES --- */
 .reports-table {
@@ -92,7 +89,6 @@ h1 {
 .reports-table td app-button-green {
     margin-right: 5px;
 }
-
 
 /* --- ESTILOS PARA VISTA DE DETALLES --- */
 .report-detail-view {
@@ -146,8 +142,6 @@ h1 {
     text-align: left; /* Alineado a la izquierda */
     font-weight: 500;
 }
-
-
 
 p.details-text {
     background-color: #f8f9fa;
@@ -215,8 +209,6 @@ p.details-text {
     box-sizing: border-box;
 }
 
-
-
 .checklist-form-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -247,7 +239,6 @@ p.details-text {
     min-width: 140px;
 }
 
-
 /* --- ESTILOS PARA EL CHECKLIST EN VISTA DE DETALLES --- */
 .details-table.checklist-table .check-true {
     background-color: #f8d7da; /* Rojo claro para indicar alerta/problema */
@@ -255,7 +246,6 @@ p.details-text {
 }
 
 /* --- ESTILOS PARA BOTONES DE ACCIÓN EN DETALLES --- */
-
 
 /* --- ESTILO PARA FORZAR ANCHO COMPLETO EN TEXTAREA --- */
 .form-full-width-item {
@@ -267,6 +257,49 @@ p.details-text {
     border-left: none;
     border-right: none;
     border-radius: 0;
+}
+
+/* --- ESTILOS PARA PAGINACIÓN --- */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 25px; /* Más espacio de separación con la tabla */
+}
+
+.pagination-info {
+    font-size: 0.8em; /* Texto más pequeño */
+    color: var(--grey-color);
+}
+
+/* Pasamos las variables de color a los custom elements para que Shadow DOM las herede */
+app-button-pagination-back,
+app-button-pagination-next {
+    --blue-color: var(--blue-color);
+    --white-color: var(--white-color);
+}
+
+.pagination-button {
+    font-size: 0.8em;
+    padding: 5px 12px;
+    min-width: 30px;
+    background-color: var(--blue-color, var(--blue-color));
+    color: var(--white-color, white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: #3a56d4; /* A slightly darker blue */
+}
+
+.pagination-button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
 }
 
 /* --- ESTILOS PARA EL FOOTER --- */

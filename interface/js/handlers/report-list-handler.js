@@ -40,12 +40,11 @@ export const renderReportList = (reports, currentPage, itemsPerPage, totalReport
   const totalPages = Math.ceil(totalReports / itemsPerPage);
   if (totalPages > 1) {
     html += `<div class="pagination-controls">`;
-    html += `<app-button-blue id="prevPage" ${currentPage === 1 ? "disabled" : ""}>Anterior</app-button-blue>`;
-    html += `<span>Página ${currentPage} de ${totalPages} (Total: ${totalReports} reportes)</span>`;
-    html += `<app-button-blue id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>Siguiente</app-button-blue>`;
+    html += `<app-button-pagination-next id="prevPage" ${currentPage === 1 ? "disabled" : ""}>&lt;</app-button-pagination-next>`;
+    html += `<span class="pagination-info">Página ${currentPage} de ${totalPages} (Total: ${totalReports} reportes)</span>`;
+    html += `<app-button-pagination-next id="nextPage" ${currentPage === totalPages ? "disabled" : ""}>&gt;</app-button-pagination-next>`;
     html += `</div>`;
   }
-
 
   showContent(contentArea, html);
 

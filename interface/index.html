@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Reportes de Reparaciones</title>
-        <link rel="stylesheet" href="/static/css/styles.css?v=1.18" />
+        <link rel="stylesheet" href="/static/css/styles.css?v=1.25" />
     </head>
     <body>
         <div class="container">
@@ -13,9 +13,13 @@
 
             <div class="menu-options">
                 <app-button-blue id="btnNuevoReporte" data-action="nuevo">Nuevo Reporte</app-button-blue>
-                <app-button-blue id="btnConsultarReporte" data-action="consultar-id">Consultar N° Reporte</app-button-blue>
+                <app-button-blue id="btnConsultarReporte" data-action="consultar-id"
+                    >Consultar N° Reporte</app-button-blue
+                >
                 <app-button-blue id="btnConsultarPlaca" data-action="consultar-placa">Consultar Placa</app-button-blue>
-                <app-button-blue id="btnConsultarCliente" data-action="consultar-cliente">Consultar Cliente</app-button-blue>
+                <app-button-blue id="btnConsultarCliente" data-action="consultar-cliente"
+                    >Consultar Cliente</app-button-blue
+                >
                 <app-button-blue id="btnListaReportes" data-action="listar">Lista de Reportes</app-button-blue>
             </div>
 
@@ -31,8 +35,12 @@
         <script type="module" src="/static/components/app-button-view-details/app-button-view-details.js"></script>
         <script type="module" src="/static/components/app-status-badge/app-status-badge.js"></script>
         <script type="module" src="/static/components/app-button-delete/app-button-delete.js"></script>
+        <script
+            type="module"
+            src="/static/components/app-button-pagination-next/app-button-pagination-next.js"
+        ></script>
 
-        <script type="module" src="/static/js/main.js"></script>
+        <script type="module" src="/static/js/main.js?v=1.11"></script>
         <footer>
             <p>Creador por GUScode | <a href="https://github.com/Gustavo9481" target="_blank">Gustavo Colmenares</a></p>
             <p>Licencia MIT</p>
