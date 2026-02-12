@@ -110,7 +110,7 @@ export const renderEditReportForm = (report) => {
     const i = index + 1;
     const div = document.createElement("div");
     div.className = "dynamic-item";
-            div.innerHTML = `<input type="number" name="servicio_item_${i}" value="${s.item}" required><input type="text" name="servicio_desc_${i}" value="${s.descripcion}" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" value="${s.presupuesto}" required><app-button-red class="btn-remove">X</app-button-red>`;      serviciosContainer.appendChild(div);
+    div.innerHTML = `<input type="number" name="servicio_item_${i}" value="${s.item}" required><input type="text" name="servicio_desc_${i}" value="${s.descripcion}" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" value="${s.presupuesto}" required><app-button-delete class="btn-remove"></app-button-delete>`; serviciosContainer.appendChild(div);
     div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
   });
 
@@ -118,7 +118,7 @@ export const renderEditReportForm = (report) => {
     const i = serviciosContainer.children.length + 1;
     const div = document.createElement("div");
     div.className = "dynamic-item";
-    div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><app-button-red class="btn-remove">X</app-button-red>`;
+    div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><app-button-delete class="btn-remove"></app-button-delete>`;
     serviciosContainer.appendChild(div);
     div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
   });
@@ -128,7 +128,7 @@ export const renderEditReportForm = (report) => {
     const i = index + 1;
     const div = document.createElement("div");
     div.className = "dynamic-item";
-            div.innerHTML = `<input type="number" name="repuesto_cant_${i}" value="${r.cantidad}" required><input type="text" name="repuesto_desc_${i}" value="${r.descripcion}" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" value="${r.presupuesto}" required><app-button-red class="btn-remove">X</app-button-red>`;      repuestosContainer.appendChild(div);
+    div.innerHTML = `<input type="number" name="repuesto_cant_${i}" value="${r.cantidad}" required><input type="text" name="repuesto_desc_${i}" value="${r.descripcion}" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" value="${r.presupuesto}" required><app-button-delete class="btn-remove"></app-button-delete>`; repuestosContainer.appendChild(div);
     div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
   });
 
@@ -136,7 +136,7 @@ export const renderEditReportForm = (report) => {
     const i = repuestosContainer.children.length + 1;
     const div = document.createElement("div");
     div.className = "dynamic-item";
-    div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><app-button-red class="btn-remove">X</app-button-red>`;
+    div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><app-button-delete class="btn-remove"></app-button-delete>`;
     repuestosContainer.appendChild(div);
     div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
   });

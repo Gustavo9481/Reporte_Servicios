@@ -15,4 +15,40 @@ export class BaseComponent extends HTMLElement {
         styleElement.textContent = styles;
         this.shadowRoot.appendChild(styleElement);
     }
+
+    /**
+     * Configura el comportamiento del botón interno, incluyendo soporte para 'submit'.
+     * @param {HTMLButtonElement} buttonElement - El elemento botón dentro del Shadow DOM.
+     */
+    setupSubmitBehavior(buttonElement) {
+        // Propagar el atributo 'type'
+        if (this.hasAttribute("type")) {
+            buttonElement.type = this.getAttribute("type");
+        }
+
+        buttonElement.addEventListener("click", (event) => {
+            // Manejo especial para type="submit" dentro de Shadow DOM
+            if (buttonElement.type === "submit") {
+                const form = this.closest("form");
+                if (form) {
+                    // Crear un botón de submit temporal fuera del Shadow DOM
+                    const tempSubmit = document.createElement("button");
+                    tempSubmit.type = "submit";
+                    tempSubmit.style.display = "none";
+                    form.appendChild(tempSubmit);
+                    tempSubmit.click();
+                    form.removeChild(tempSubmit);
+                    return; // Detener propagación adicional
+                }
+            }
+
+            // Para clics normales, despachar evento al componente principal
+            this.dispatchEvent(
+                new MouseEvent("click", {
+                    bubbles: true,
+                    composed: true,
+                })
+            );
+        });
+    }
 }

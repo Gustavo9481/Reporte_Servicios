@@ -100,122 +100,122 @@ export const renderNewReportForm = () => {
                     </div>
                 </form>
             `;
-    showContent(contentArea, html);
+  showContent(contentArea, html);
 
-    document.getElementById("btnAddServicio").addEventListener("click", () => {
-      const i = document.getElementById("servicios-container").children.length + 1;
-      const div = document.createElement("div");
-      div.className = "dynamic-item";
-      div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción del Servicio" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><app-button-delete class="btn-remove">X</app-button-delete>`;
-      document.getElementById("servicios-container").appendChild(div);
-      div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
+  document.getElementById("btnAddServicio").addEventListener("click", () => {
+    const i = document.getElementById("servicios-container").children.length + 1;
+    const div = document.createElement("div");
+    div.className = "dynamic-item";
+    div.innerHTML = `<input type="number" name="servicio_item_${i}" placeholder="Item" required value="${i}"><input type="text" name="servicio_desc_${i}" placeholder="Descripción del Servicio" required><input type="number" step="0.01" name="servicio_presupuesto_${i}" placeholder="Presupuesto" required><app-button-delete class="btn-remove"></app-button-delete>`;
+    document.getElementById("servicios-container").appendChild(div);
+    div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
+  });
+
+  document.getElementById("btnAddRepuesto").addEventListener("click", () => {
+    const i = document.getElementById("repuestos-container").children.length + 1;
+    const div = document.createElement("div");
+    div.className = "dynamic-item";
+    div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción del Repuesto" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><app-button-delete class="btn-remove">X</app-button-delete>`;
+    document.getElementById("repuestos-container").appendChild(div);
+    div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
+  });
+
+  document.getElementById("formNuevoReporte").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+
+    const servicios = Array.from(document.getElementById("servicios-container").children).map((div, index) => {
+      const i = index + 1;
+      return {
+        item: parseInt(div.querySelector(`input[name^="servicio_item_"]`).value),
+        descripcion: div.querySelector(`input[name^="servicio_desc_"]`).value,
+        presupuesto: parseFloat(div.querySelector(`input[name^="servicio_presupuesto_"]`).value),
+      };
     });
 
-    document.getElementById("btnAddRepuesto").addEventListener("click", () => {
-      const i = document.getElementById("repuestos-container").children.length + 1;
-      const div = document.createElement("div");
-      div.className = "dynamic-item";
-      div.innerHTML = `<input type="number" name="repuesto_cant_${i}" placeholder="Cantidad" required><input type="text" name="repuesto_desc_${i}" placeholder="Descripción del Repuesto" required><input type="number" step="0.01" name="repuesto_presupuesto_${i}" placeholder="Presupuesto" required><app-button-delete class="btn-remove">X</app-button-delete>`;
-      document.getElementById("repuestos-container").appendChild(div);
-      div.querySelector(".btn-remove").addEventListener("click", () => div.remove());
+    const repuestos = Array.from(document.getElementById("repuestos-container").children).map((div, index) => {
+      const i = index + 1;
+      return {
+        cantidad: parseInt(div.querySelector(`input[name^="repuesto_cant_"]`).value),
+        descripcion: div.querySelector(`input[name^="repuesto_desc_"]`).value,
+        presupuesto: parseFloat(div.querySelector(`input[name^="repuesto_presupuesto_"]`).value),
+      };
     });
 
-    document.getElementById("formNuevoReporte").addEventListener("submit", async (event) => {
-      event.preventDefault();
-      const formData = new FormData(event.target);
+    const getOptionalNumber = (name) => {
+      const value = formData.get(name);
+      return value !== "" ? parseFloat(value) : null;
+    };
+    const getOptionalString = (name) => {
+      const value = formData.get(name);
+      return value !== "" ? value : null;
+    };
+    const reporte = {
+      placa: formData.get("placa"),
+      modelo: formData.get("modelo"),
+      color: formData.get("color"),
+      nombre_cliente: formData.get("nombre_cliente"),
+      cedula_cliente: parseInt(formData.get("cedula_cliente")),
+      telefono_cliente: parseInt(formData.get("telefono_cliente")),
+      factura_reporte: getOptionalString("factura_reporte"),
+      factura_monto: getOptionalNumber("factura_monto"),
+      // CARROCERÍA
+      carroceria_golpe: formData.get("carroceria_golpe") === "on",
+      carroceria_suelto: formData.get("carroceria_suelto") === "on",
+      carroceria_rayas: formData.get("carroceria_rayas") === "on",
+      carroceria_desconchado: formData.get("carroceria_desconchado") === "on",
+      carroceria_vidrio_roto: formData.get("carroceria_vidrio_roto") === "on",
+      carroceria_falta_moldura: formData.get("carroceria_falta_moldura") === "on",
+      carroceria_falta_faro: formData.get("carroceria_falta_faro") === "on",
+      carroceria_falta_accesorio: formData.get("carroceria_falta_accesorio") === "on",
+      carroceria_espejo_roto: formData.get("carroceria_espejo_roto") === "on",
+      carroceria_falta_centro_copas: formData.get("carroceria_falta_centro_copas") === "on",
+      carroceria_otro: formData.get("carroceria_otro") === "on",
+      // ACCESORIOS
+      accesorios_alfombra_delantera: formData.get("accesorios_alfombra_delantera") === "on",
+      accesorios_alfombra_trasera: formData.get("accesorios_alfombra_trasera") === "on",
+      accesorios_radio: formData.get("accesorios_radio") === "on",
+      accesorios_radio_reproductor: formData.get("accesorios_radio_reproductor") === "on",
+      accesorios_antena_electrica: formData.get("accesorios_antena_electrica") === "on",
+      accesorios_encendedor_cigarrillos: formData.get("accesorios_encendedor_cigarrillos") === "on",
+      accesorios_triangulo_seguridad: formData.get("accesorios_triangulo_seguridad") === "on",
+      accesorios_gato: formData.get("accesorios_gato") === "on",
+      accesorios_caucho_repuesto: formData.get("accesorios_caucho_repuesto") === "on",
+      accesorios_otro: formData.get("accesorios_otro") === "on",
+      // SISTEMA ELECTRICO
+      sistem_electric_frenos_del: formData.get("sistem_electric_frenos_del") === "on",
+      sistem_electric_tablero: formData.get("sistem_electric_tablero") === "on",
+      sistem_electric_luz_cruce: formData.get("sistem_electric_luz_cruce") === "on",
+      sistem_electric_stop: formData.get("sistem_electric_stop") === "on",
+      sistem_electric_vidrio_electrico: formData.get("sistem_electric_vidrio_electrico") === "on",
+      sistem_electric_aire_acondicionado: formData.get("sistem_electric_aire_acondicionado") === "on",
+      sistem_electric_otro: formData.get("sistem_electric_otro") === "on",
 
-      const servicios = Array.from(document.getElementById("servicios-container").children).map((div, index) => {
-        const i = index + 1;
-        return {
-          item: parseInt(div.querySelector(`input[name^="servicio_item_"]`).value),
-          descripcion: div.querySelector(`input[name^="servicio_desc_"]`).value,
-          presupuesto: parseFloat(div.querySelector(`input[name^="servicio_presupuesto_"]`).value),
-        };
+      observaciones: formData.get("observaciones"),
+      servicios: servicios,
+      repuestos: repuestos,
+    };
+    try {
+      const response = await fetch("/reportes/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reporte),
       });
-
-      const repuestos = Array.from(document.getElementById("repuestos-container").children).map((div, index) => {
-        const i = index + 1;
-        return {
-          cantidad: parseInt(div.querySelector(`input[name^="repuesto_cant_"]`).value),
-          descripcion: div.querySelector(`input[name^="repuesto_desc_"]`).value,
-          presupuesto: parseFloat(div.querySelector(`input[name^="repuesto_presupuesto_"]`).value),
-        };
-      });
-
-      const getOptionalNumber = (name) => {
-        const value = formData.get(name);
-        return value !== "" ? parseFloat(value) : null;
-      };
-      const getOptionalString = (name) => {
-        const value = formData.get(name);
-        return value !== "" ? value : null;
-      };
-      const reporte = {
-        placa: formData.get("placa"),
-        modelo: formData.get("modelo"),
-        color: formData.get("color"),
-        nombre_cliente: formData.get("nombre_cliente"),
-        cedula_cliente: parseInt(formData.get("cedula_cliente")),
-        telefono_cliente: parseInt(formData.get("telefono_cliente")),
-        factura_reporte: getOptionalString("factura_reporte"),
-        factura_monto: getOptionalNumber("factura_monto"),
-        // CARROCERÍA
-        carroceria_golpe: formData.get("carroceria_golpe") === "on",
-        carroceria_suelto: formData.get("carroceria_suelto") === "on",
-        carroceria_rayas: formData.get("carroceria_rayas") === "on",
-        carroceria_desconchado: formData.get("carroceria_desconchado") === "on",
-        carroceria_vidrio_roto: formData.get("carroceria_vidrio_roto") === "on",
-        carroceria_falta_moldura: formData.get("carroceria_falta_moldura") === "on",
-        carroceria_falta_faro: formData.get("carroceria_falta_faro") === "on",
-        carroceria_falta_accesorio: formData.get("carroceria_falta_accesorio") === "on",
-        carroceria_espejo_roto: formData.get("carroceria_espejo_roto") === "on",
-        carroceria_falta_centro_copas: formData.get("carroceria_falta_centro_copas") === "on",
-        carroceria_otro: formData.get("carroceria_otro") === "on",
-        // ACCESORIOS
-        accesorios_alfombra_delantera: formData.get("accesorios_alfombra_delantera") === "on",
-        accesorios_alfombra_trasera: formData.get("accesorios_alfombra_trasera") === "on",
-        accesorios_radio: formData.get("accesorios_radio") === "on",
-        accesorios_radio_reproductor: formData.get("accesorios_radio_reproductor") === "on",
-        accesorios_antena_electrica: formData.get("accesorios_antena_electrica") === "on",
-        accesorios_encendedor_cigarrillos: formData.get("accesorios_encendedor_cigarrillos") === "on",
-        accesorios_triangulo_seguridad: formData.get("accesorios_triangulo_seguridad") === "on",
-        accesorios_gato: formData.get("accesorios_gato") === "on",
-        accesorios_caucho_repuesto: formData.get("accesorios_caucho_repuesto") === "on",
-        accesorios_otro: formData.get("accesorios_otro") === "on",
-        // SISTEMA ELECTRICO
-        sistem_electric_frenos_del: formData.get("sistem_electric_frenos_del") === "on",
-        sistem_electric_tablero: formData.get("sistem_electric_tablero") === "on",
-        sistem_electric_luz_cruce: formData.get("sistem_electric_luz_cruce") === "on",
-        sistem_electric_stop: formData.get("sistem_electric_stop") === "on",
-        sistem_electric_vidrio_electrico: formData.get("sistem_electric_vidrio_electrico") === "on",
-        sistem_electric_aire_acondicionado: formData.get("sistem_electric_aire_acondicionado") === "on",
-        sistem_electric_otro: formData.get("sistem_electric_otro") === "on",
-
-        observaciones: formData.get("observaciones"),
-        servicios: servicios,
-        repuestos: repuestos,
-      };
-      try {
-        const response = await fetch("/reportes/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(reporte),
-        });
-        const data = await response.json();
-        if (response.ok) {
-          alert("¡Reporte creado exitosamente!");
-          showReportDetails(data.id_reporte);
-        } else {
-          alert(`Error al crear el reporte: ${data.detail || "Error desconocido"}`); // Añadido detalle de error
-        }
-      } catch (error) {
-        alert(`Error de red: ${error.message}`);
+      const data = await response.json();
+      if (response.ok) {
+        alert("¡Reporte creado exitosamente!");
+        showReportDetails(data.id_reporte);
+      } else {
+        alert(`Error al crear el reporte: ${data.detail || "Error desconocido"}`); // Añadido detalle de error
       }
-    });
+    } catch (error) {
+      alert(`Error de red: ${error.message}`);
+    }
+  });
 
-    document.getElementById("btnCancelarNuevoReporte").addEventListener("click", () => {
-        showContent(contentArea, ""); // Limpia el área de contenido
-        // Aquí podrías querer volver a la lista de reportes, si tiene sentido en el flujo
-        renderReportList(); // Asumimos que podemos recargar la lista de reportes
-    });
-  };
+  document.getElementById("btnCancelarNuevoReporte").addEventListener("click", () => {
+    showContent(contentArea, ""); // Limpia el área de contenido
+    // Aquí podrías querer volver a la lista de reportes, si tiene sentido en el flujo
+    renderReportList(); // Asumimos que podemos recargar la lista de reportes
+  });
+};

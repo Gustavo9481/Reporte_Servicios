@@ -27,6 +27,17 @@ uv.lock
 *.sqlite3
 /data/dB.sqlite3
 
-# Logs and temporary files
 *.log
 *.tmp
+
+# Custom folders
+conductor/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Database temp files
+*.sqlite3-shm
+*.sqlite3-wal

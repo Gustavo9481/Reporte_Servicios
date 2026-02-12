@@ -1,3 +1,7 @@
+// MÓDULO: interface/components/app-button-view-details/app-button-view-details.js
+//.. ................................................. AppButtonViewDetails ..
+// Componente personalizado para boton de Ver Detalles de reportes.
+
 import { BaseComponent } from "../BaseComponent.js";
 
 const styles = `
@@ -5,20 +9,20 @@ const styles = `
         display: inline-block;
     }
     button {
-        background-color: var(--green-color, #2a9d8f);
-        color: var(--white-color, white);
-        padding: 5px 10px; /* Tamaño pequeño */
-        border: none; /* Sin borde */
-        border-radius: 5px; /* Redondeado */
+        background-color: var(--green-color);
+        color: var(--white-color);
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
         cursor: pointer;
-        font-size: 13px; /* Tamaño de fuente pequeño */
-        transition: background-color 0.3s ease; /* Animación de hover */
+        font-size: 13px;
+        transition: background-color 0.3s ease;
         box-sizing: border-box;
-        min-width: unset; /* Eliminar min-width por defecto si no es necesario */
+        min-width: unset;
     }
 
     button:hover {
-        background-color: var(--darker-green, #217d72);
+        background-color: var(--green-darker);
     }
 `;
 
@@ -35,14 +39,8 @@ class AppButtonViewDetails extends BaseComponent {
             </button>
         `;
 
-        // Propagate clicks from the button to the custom element
-        this.shadowRoot.querySelector('button').addEventListener('click', (event) => {
-            this.dispatchEvent(new MouseEvent('click', {
-                bubbles: true,
-                composed: true,
-            }));
-        });
+        this.setupSubmitBehavior(this.shadowRoot.querySelector("button"));
     }
 }
 
-customElements.define('app-button-view-details', AppButtonViewDetails);
+customElements.define("app-button-view-details", AppButtonViewDetails);

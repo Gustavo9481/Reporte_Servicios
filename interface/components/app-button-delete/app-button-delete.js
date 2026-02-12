@@ -5,12 +5,12 @@ const styles = `
         display: inline-flex; /* Usar inline-flex para centrar contenido */
         align-items: center;
         justify-content: center;
-        width: 90px; /* Tamaño un poco más grande para un botón */
-        height: 30px; /* Tamaño un poco más grande para un botón */
+        width: 24px; /* Tamaño ajustado para igualar a app-status-badge */
+        height: 24px; /* Tamaño ajustado para igualar a app-status-badge */
         border-radius: 50%;
         background-color: var(--red-color, #c1121f); /* Color rojo para eliminar */
         color: var(--white-color, white);
-        font-size: 16px; /* Tamaño de fuente para la 'X' */
+        font-size: 14px; /* Tamaño de fuente ajustado */
         font-weight: bold;
         border: none;
         box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -45,20 +45,11 @@ class AppButtonDelete extends BaseComponent {
     this.applyStyles(styles);
     this.shadowRoot.innerHTML += `
             <button>
-                <slot></slot>
+                <slot>✖</slot>
             </button>
         `;
 
-    // Propagate clicks from the button to the custom element
-    this.shadowRoot.querySelector("button").addEventListener("click", (event) => {
-      // Re-dispatch the event from the custom element
-      this.dispatchEvent(
-        new MouseEvent("click", {
-          bubbles: true,
-          composed: true,
-        }),
-      );
-    });
+    this.setupSubmitBehavior(this.shadowRoot.querySelector("button"));
   }
 }
 

@@ -5,7 +5,7 @@ const styles = `
       display: inline-block;
     }
     button {
-      background-color: #4361ee;
+      background-color: var(--blue-color);
       color: white;
       border: none;
       border-radius: 50%; /* Makes it a circle */
@@ -23,33 +23,28 @@ const styles = `
       background-color: #3a56d4; /* Darker blue */
     }
     button:disabled {
-      background-color: #ccc;
-      color: #666;
+      background-color: white;
+      color: var(--grey-color);
       cursor: not-allowed;
     }
 `;
 
 class AppButtonPaginationNext extends BaseComponent {
-    constructor() {
-        super();
-    }
+  constructor() {
+    super();
+  }
 
-    connectedCallback() {
-        this.applyStyles(styles);
-        this.shadowRoot.innerHTML += `
-            <button>
-                <slot></slot>
-            </button>
-        `;
+  connectedCallback() {
+    // this.applyStyles(styles);
+    this.shadowRoot.innerHTML = `
+        <style>${styles}</style>
+        <button>
+          <slot></slot>
+        </button>
+    `;
 
-        // Propagate clicks from the button to the custom element
-        this.shadowRoot.querySelector('button').addEventListener('click', (event) => {
-            this.dispatchEvent(new MouseEvent('click', {
-                bubbles: true,
-                composed: true,
-            }));
-        });
-    }
+    this.setupSubmitBehavior(this.shadowRoot.querySelector("button"));
+  }
 }
 
-customElements.define('app-button-pagination-next', AppButtonPaginationNext);
+customElements.define("app-button-pagination-next", AppButtonPaginationNext);

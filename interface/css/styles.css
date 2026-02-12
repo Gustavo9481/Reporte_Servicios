@@ -2,18 +2,21 @@
 
 :root {
     --blue-color: #4361ee;
+    --blue-darker: #3a4bb4;
     --red-color: #c1121f;
+    --red-darker: #94191a;
     --green-color: #2a9d8f;
-    --grey-color: #6c757d; /* Color de texto principal */
-    --white-color: white;
-    --black-color: black;
-    --backgorund-color: #cae9ff;
+    --green-darker: #27786d;
+    --grey-color: #6c757d;
+    --white-color: #eeeff0;
+    --black-color: #111213;
+    --background-color: #dddfe1;
 }
 
 body {
     font-family: Arial, sans-serif;
     margin: 0; /* Eliminar margen del body */
-    background-color: var(--backgorund-color);
+    background-color: var(--background-color);
     color: var(--grey-color);
     display: flex;
     flex-direction: column;
@@ -271,13 +274,6 @@ p.details-text {
 .pagination-info {
     font-size: 0.8em; /* Texto más pequeño */
     color: var(--grey-color);
-}
-
-/* Pasamos las variables de color a los custom elements para que Shadow DOM las herede */
-app-button-pagination-back,
-app-button-pagination-next {
-    --blue-color: var(--blue-color);
-    --white-color: var(--white-color);
 }
 
 .pagination-button {

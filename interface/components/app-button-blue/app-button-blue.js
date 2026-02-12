@@ -1,3 +1,7 @@
+// MÓDULO: interface/components/app-button-blue/app-button-blue.js
+//.. ........................................................... AppButBlue ..
+// Componente personalizado para botones azules rectangilares.
+
 import { BaseComponent } from "../BaseComponent.js";
 
 const styles = `
@@ -6,8 +10,8 @@ const styles = `
         min-width: 140px;
     }
     button {
-        background-color: var(--blue-color, #4361ee);
-        color: var(--white-color, white);
+        background-color: var(--blue-color);
+        color: var(--white-color);
         padding: 10px 15px;
         border: none;
         border-radius: 5px;
@@ -19,7 +23,7 @@ const styles = `
     }
 
     button:hover {
-        background-color: var(--darker-blue, #3a56d4);
+        background-color: var(--blue-darker);
     }
 `;
 
@@ -36,15 +40,8 @@ class AppButtonBlue extends BaseComponent {
             </button>
         `;
 
-        // Propagate clicks from the button to the custom element
-        this.shadowRoot.querySelector('button').addEventListener('click', (event) => {
-            // Re-dispatch the event from the custom element
-            this.dispatchEvent(new MouseEvent('click', {
-                bubbles: true,
-                composed: true,
-            }));
-        });
+        this.setupSubmitBehavior(this.shadowRoot.querySelector("button"));
     }
 }
 
-customElements.define('app-button-blue', AppButtonBlue);
+customElements.define("app-button-blue", AppButtonBlue);
