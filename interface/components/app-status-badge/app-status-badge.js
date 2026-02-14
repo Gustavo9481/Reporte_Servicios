@@ -1,3 +1,8 @@
+// MODULO: interface/components/app-status-badge/app-status-badge.js
+
+// Componente personalizado para ícono informativo de status.
+
+
 import { BaseComponent } from "../BaseComponent.js";
 
 class AppStatusBadge extends BaseComponent {

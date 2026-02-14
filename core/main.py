@@ -1,5 +1,7 @@
 # MODULO: core/main.py
-# Archivo de lanzamiento de la app, almacén de endpoints.
+""" Archivo de lanzamiento de la app, almacén de endpoints.
+    Rutas modularizadas con APIRouter.
+"""
 
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -12,13 +14,13 @@ from api.routes import reports
 from data.database import create_db_tables
 
 
-# Verificación de que las tablas esten creadas al iniciar la app.
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """ Gestión del ciclo de vida de la aplicación. Se ejecuta al iniciar y
+    cerrar el servidor. Verifica que las tablas esten creadas al iniciar la
+    app.
     """
-    Gestión del ciclo de vida de la aplicación.
-    Se ejecuta al iniciar y cerrar el servidor.
-    """
+
     create_db_tables()
     yield
 
@@ -39,9 +41,10 @@ app = FastAPI(
 )
 
 # Montado de la carpeta 'interface' como estáticos en '/static/'.
+# Sirve los archivos del módulo interface para crear la UI.
 app.mount("/static", StaticFiles(directory="interface"), name="static")
 
-# Incluir routers
+# Incluir routers -> endpoints. Modularización con APIRouter.
 app.include_router(reports.router)
 
 
@@ -49,8 +52,10 @@ app.include_router(reports.router)
 # Entrada a la app
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)  # oculta de /docs
 async def serve_index_html():
-    """Sirve el archivo HTML a la página de inicio"""
+    """ Sirve el archivo HTML a la página de inicio. """
+
     html_file_path = Path("interface/index.html")
+
     if not html_file_path.is_file():
         raise HTTPException(status_code=404, detail="Archivo index no encontrado")
     return html_file_path.read_text()
@@ -60,5 +65,6 @@ async def serve_index_html():
 # Mensaje de conexión de la api.
 @app.get("/api/status")
 def get_api_status():
-    """Test para raíz de la api, sirve un mensaje"""
+    """ Test para raíz de la api, sirve un mensaje. """
+
     return {"API -> Reportes de taller | Bienvenido !!"}

@@ -1,5 +1,7 @@
-# MODULO: data
-# Modelos para base de datos
+# MODULO: data/models.py
+""" Modelos para base de datos.
+    Definición de las estructuras de las tables.
+"""
 
 from datetime import date
 from typing import List, Literal, Optional
@@ -9,12 +11,10 @@ from sqlalchemy.orm import relationship
 
 from .database import Base
 
-# .. ................................................... Modelos SQLAlchemy ..󰌠
-# Definición de las estructuras de las tablas
 
-
+# .. ............................................................ SERVICIOS ..󰌠
 class ServiciosDB(Base):
-    """Tabla de Servicios"""
+    """ Tabla de Servicios. """
 
     __tablename__ = "servicios"
     id_servicio = Column(Integer, primary_key=True, index=True)
@@ -25,8 +25,9 @@ class ServiciosDB(Base):
     reporte = relationship("ReportesDB", back_populates="servicios")
 
 
+# .. ............................................................ REPUESTOS ..󰌠
 class RepuestosDB(Base):
-    """Tabla de Repuestos"""
+    """ Tabla de Repuestos. """
 
     __tablename__ = "repuestos"
     id_repuesto = Column(Integer, primary_key=True, index=True)
@@ -37,8 +38,9 @@ class RepuestosDB(Base):
     reporte = relationship("ReportesDB", back_populates="repuestos")
 
 
+# .. ............................................................. REPORTES ..󰌠
 class ReportesDB(Base):
-    """Tabla de Reportes (principal)"""
+    """ Tabla de Reportes (principal). """
 
     __tablename__ = "reportes"
     id_reporte = Column(Integer, primary_key=True, index=True)
@@ -98,5 +100,3 @@ class ReportesDB(Base):
     repuestos = relationship(
         "RepuestosDB", back_populates="reporte", cascade="all, delete-orphan"
     )
-
-

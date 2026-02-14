@@ -1,3 +1,8 @@
+// MODULO: interface/components/app-button-pagination-next/app-button-pagination-next.js
+
+// Componente personalizado para otón circular de paginación (< >).
+
+
 import { BaseComponent } from "../BaseComponent.js";
 
 const styles = `

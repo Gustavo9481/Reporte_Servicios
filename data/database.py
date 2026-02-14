@@ -1,5 +1,5 @@
-# MODULO: data
-# Gestión de conexión a la base de datos.
+# MODULO: data/database.py
+""" Gestión de conexión a la base de datos. """
 
 from typing import Generator
 
@@ -9,11 +9,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 import os
 from pathlib import Path
 
-# Creación de la base de datos dentro de carpeta data/.
+# Creación y ubicación de la base de datos dentro de carpeta data/.
 DB_PATH = Path("./data/dB.sqlite3")
 DOMAIN_DIR = DB_PATH.parent
 
-# Asegurar que el directorio exista
+# Comprobación de la existencia del directorio.
 if not DOMAIN_DIR.exists():
     os.makedirs(DOMAIN_DIR, exist_ok=True)
 
@@ -28,8 +28,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 
+# .. .................................................... función -> get_db ..󰌠
 def get_db() -> Generator:
-    """Gestiona la conexión a DB"""
+    """ Gestiona la conexión a DB. """
+
     db = SessionLocal()
     try:
         yield db
@@ -37,8 +39,10 @@ def get_db() -> Generator:
         db.close()
 
 
+# .. .......................................... función -> create_db_tables ..󰌠
 def create_db_tables() -> None:
-    """Crea las tablas en la DB"""
+    """ Crea las tablas en la DB. """
+
     from . import models
 
     Base.metadata.create_all(bind=engine)

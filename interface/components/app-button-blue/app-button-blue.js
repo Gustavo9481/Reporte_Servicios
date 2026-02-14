@@ -1,5 +1,5 @@
-// MÓDULO: interface/components/app-button-blue/app-button-blue.js
-//.. ........................................................... AppButBlue ..
+// MODULO: interface/components/app-button-blue/app-button-blue.js
+
 // Componente personalizado para botones azules rectangilares.
 
 import { BaseComponent } from "../BaseComponent.js";

@@ -1,5 +1,10 @@
 # MODULO: core/pdf_generator.py
-# Generador de PDFs para Reporte_Servicios.
+""" Generador de PDFs para Reporte_Servicios.
+Aplicación del módulo Reportlab.
+El presente módulo genera un archivo .pdf con toda la información del reporte
+para poder obtener la firma de aceptación y conformidad del cliente.
+El archivo se genera con el número de placa por defecto.
+"""
 
 from io import BytesIO
 
@@ -11,10 +16,9 @@ from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 
-def draw_footer(canvas, doc):
-    """
-    Dibuja el pie de página en la parte inferior de cada página.
-    """
+def draw_footer(canvas, doc) -> None:
+    """ Dibuja el pie de página en la parte inferior de cada página. """
+
     canvas.saveState()
 
     footer_style = ParagraphStyle(
@@ -31,23 +35,24 @@ def draw_footer(canvas, doc):
 
     p = Paragraph(text, footer_style)
 
-    # Usa las dimensiones del documento para el posicionamiento
+    # Usa las dimensiones del documento para el posicionamiento.
     w, h = p.wrap(doc.width * 0.7, doc.bottomMargin)
 
-    # Calcula la posición x para centrar el bloque de 70%
+    # Calcula la posición x para centrar el bloque de 70%.
     x = doc.leftMargin + (doc.width - (doc.width * 0.7)) / 2
 
-    # Posiciona el texto en la parte inferior del margen
-    y = doc.bottomMargin - h - 20  # Ajuste fino para la posición vertical
+    # Posiciona el texto en la parte inferior del margen.
+    y = doc.bottomMargin - h - 20  # Ajuste fino para la posición vertical.
 
     p.drawOn(canvas, x, y)
     canvas.restoreState()
 
 
 def generate_report_pdf(report_data):
+    """ Genera un archivo PDF para un reporte específico incluyendo todos los
+    campos del checklist.
     """
-    Genera un archivo PDF para un reporte específico incluyendo todos los campos del checklist.
-    """
+
     buffer = BytesIO()
     doc = SimpleDocTemplate(
         buffer,
@@ -84,15 +89,19 @@ def generate_report_pdf(report_data):
 
     story = []
 
-    # --- Título ---
+    # .. ............................................... Título
+    # Título simple para el reporte.
     story.append(
         Paragraph(f"Reporte de Servicio -> #{report_data.id_reporte}", styles["h1"])
     )
     story.append(Spacer(1, 0.04 * inch))
 
-    # --- Información General ---
-    story.append(Paragraph("Información General", styles["h3"]))
-    # Calcular anchos proporcionales para el 100%
+    # .. .................................. Información General
+    # Información o datos básicos del reporte.
+    story.append(
+        Paragraph("Información General", styles["h3"])
+    )
+    # Calculo de anchos proporcionales para el 100%.
     w1, w3 = 1.0 * inch, 0.8 * inch
     w_rest = (usable_width - w1 - w3) / 2
     info_col_widths = [w1, w_rest, w3, w_rest]
@@ -128,7 +137,9 @@ def generate_report_pdf(report_data):
     story.append(info_table)
     story.append(Spacer(1, 0.04 * inch))
 
-    # --- Función para crear tablas de checklist ---
+
+    # .. .................... función -> create_checklist_table
+    # Crea tablas de checklist.
     def create_checklist_table(title, items):
         story.append(Paragraph(title, styles["h3"]))
         data = []
@@ -158,7 +169,8 @@ def generate_report_pdf(report_data):
         )
         return t
 
-    # --- Secciones del Checklist ---
+    # .. .............................. Secciones del CkeckList
+    # Listados de opciones de selección, con su marca correspondiente.
     carroceria_items = [
         ("Golpe", report_data.carroceria_golpe),
         ("Suelto", report_data.carroceria_suelto),
@@ -199,7 +211,8 @@ def generate_report_pdf(report_data):
     ]
     story.append(create_checklist_table("Sistemas Eléctricos", electrico_items))
 
-    # --- Observaciones ---
+    # .. ........................................ Observaciones
+    # Cuadro de texto para observacionesadicionales a los checklist.
     if report_data.observaciones:
         story.append(Paragraph("Observaciones Adicionales", styles["h3"]))
         story.append(
@@ -208,7 +221,8 @@ def generate_report_pdf(report_data):
             )
         )
 
-    # --- Servicios y Repuestos ---
+    # .. ................................ Servicios & Repuestos
+    # Listas de servicios y repuestos con sus cantidades y totales.
     def create_items_table(title, header, rows):
         story.append(Paragraph(title, styles["h3"]))
         data = [header] + rows
@@ -253,7 +267,8 @@ def generate_report_pdf(report_data):
         )
         story.append(Spacer(1, 0.02 * inch))
 
-    # --- Totales ---
+    # .. ..................... Totales -> Servicios & Repuestos
+    # Tabla de totales para Servicio y Repuestos registrados.
     story.append(Spacer(1, 0.04 * inch))
     total_data = [
         ["Total Servicios:", f"{report_data.total_servicios or 0:.2f}"],
@@ -274,7 +289,8 @@ def generate_report_pdf(report_data):
     )
     story.append(total_table)
 
-    # --- Firma ---
+    # .. ........................................ Firma Cliente
+    # Sección para firma de aprobación y aceptación por parte del cliente.
     story.append(Spacer(1, 0.3 * inch))
     firma_data = [
         ["", "________________________"],

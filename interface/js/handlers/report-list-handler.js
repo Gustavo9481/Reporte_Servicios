@@ -1,10 +1,14 @@
-// MÓDULO: interface/js/handlers/report-list-handler.js
+// MODULO: interface/js/handlers/report-list-handler.js
+
+// Manejosdor para interfaz de 'Lista de Reportes'.
+
 import { showContent } from "../utils/dom-utils.js";
 import { showReportDetails } from "./report-details-handler.js";
 
 const contentArea = document.getElementById("contentArea");
 
-// --- FUNCIÓN PARA RENDERIZAR LA LISTA DE REPORTES EN UNA TABLA CON PAGINACIÓN ---
+
+// Renderiza la lista de reportes general en una tabla con paginación.
 export const renderReportList = (reports, currentPage, itemsPerPage, totalReports, onPageChange) => {
   let html = "<h2>Listado de Reportes</h2>";
   if (reports.length === 0 && totalReports === 0) {

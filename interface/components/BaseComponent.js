@@ -1,6 +1,8 @@
 // MÓDULO: interface/components/BaseComponent.js
+// Calse madre para web components.
 
 export class BaseComponent extends HTMLElement {
+    
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -8,7 +10,7 @@ export class BaseComponent extends HTMLElement {
 
     /**
      * Aplica los estilos CSS al Shadow DOM del componente.
-     * @param {string} styles - Una cadena de texto con el contenido CSS.
+     * @param {string} styles - Cadena de texto con el contenido CSS.
      */
     applyStyles(styles) {
         const styleElement = document.createElement("style");
@@ -17,8 +19,10 @@ export class BaseComponent extends HTMLElement {
     }
 
     /**
-     * Configura el comportamiento del botón interno, incluyendo soporte para 'submit'.
-     * @param {HTMLButtonElement} buttonElement - El elemento botón dentro del Shadow DOM.
+     * Configura el comportamiento del botón interno, incluyendo soporte para
+     * 'submit'.
+     * @param {HTMLButtonElement} buttonElement - El elemento botón dentro del
+     * Shadow DOM.
      */
     setupSubmitBehavior(buttonElement) {
         // Propagar el atributo 'type'
@@ -42,7 +46,7 @@ export class BaseComponent extends HTMLElement {
                 }
             }
 
-            // Para clics normales, despachar evento al componente principal
+            // Para clicks normales, despachar evento al componente principal.
             this.dispatchEvent(
                 new MouseEvent("click", {
                     bubbles: true,

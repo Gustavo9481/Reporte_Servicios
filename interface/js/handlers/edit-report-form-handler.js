@@ -1,4 +1,7 @@
-// MÓDULO: interface/js/handlers/edit-report-form-handler.js
+// MODULO: interface/js/handlers/edit-report-form-handler.js
+
+// Menajador de interfaz de 'Editar Reporte'.
+
 import { showContent } from "../utils/dom-utils.js";
 import { showReportDetails } from "./report-details-handler.js";
 

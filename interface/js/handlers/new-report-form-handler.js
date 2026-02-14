@@ -1,4 +1,8 @@
-// MÓDULO: interface/js/handlers/new-report-form-handler.js
+// MODULO: interface/js/handlers/new-report-form-handler.js
+
+// Manejador de interfaz para 'Nuevo Reporte'.
+
+
 import { showContent } from "../utils/dom-utils.js";
 import { showReportDetails } from "./report-details-handler.js";
 import { renderReportList } from "./report-list-handler.js";

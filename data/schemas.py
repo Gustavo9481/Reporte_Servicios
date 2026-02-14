@@ -1,13 +1,16 @@
+# MODULO: data/schemas.py
+""" Schemas de datos. 
+    Validación de entradas y salidas por medio de pydantic | solicitudes http.
+"""
+
 from datetime import date
 from typing import List, Literal, Optional
 from pydantic import BaseModel, Field
 
-# .. ..................................................... Modelos Pydantic ..󰌠
-# Validación de datos entrada y salida | solicitudes http.
 
-
+# .. ............................................................ SERVICIOS ..󰌠
 class Servicio(BaseModel):
-    """Tabla de SERVICIOS"""
+    """ Tabla de SERVICIOS. """
 
     id_servicio: Optional[int] = Field(None, description="id autoincrementable")
     id_reporte: Optional[int] = Field(None, description="relación con REPORTES")
@@ -16,8 +19,9 @@ class Servicio(BaseModel):
     presupuesto: float = Field(..., description="Costo presupuestado del servicio")
 
 
+# .. ............................................................ REPUESTOS ..󰌠
 class Repuesto(BaseModel):
-    """Tabla de REPUESTOS"""
+    """ Tabla de REPUESTOS. """
 
     id_repuesto: Optional[int] = Field(None, description="id autoincrementable")
     id_reporte: Optional[int] = Field(None, description="relación con REPORTES")
@@ -26,8 +30,9 @@ class Repuesto(BaseModel):
     presupuesto: float = Field(..., description="Costo presupuestado del repuesto")
 
 
+# .. ............................................................. REPORTES ..󰌠
 class Reporte(BaseModel):
-    """Tabla de REPORTES (principal)"""
+    """ Tabla de REPORTES (principal). """
 
     id_reporte: Optional[int] = Field(None, description="id autoincrementable")
     placa: str = Field(..., max_length=7, description="matrícula del vehículo")
@@ -156,9 +161,10 @@ class Reporte(BaseModel):
         [], description="Lista de repuestos asociados al reporte"
     )
 
+    # .. ...................................... class -> config
     class Config:
-        """Clase de configuración, ayuda a pydantic a tener claro como deben estar
-        estructurados los datos de los modelos.
+        """ Clase de configuración, ayuda a pydantic a tener claro como deben
+        estar estructurados los datos de los modelos.
         """
 
         from_attributes = True
@@ -180,6 +186,10 @@ class Reporte(BaseModel):
         }
 
 
+# .. ............................................... PAGINACIÓN DE REPORTES ..󰌠
 class PaginatedReportsResponse(BaseModel):
+    """ Clase que otorga los valores necesarios para la paginación de los
+    reportes en la opción 'Lista de Reportes'. """
+
     total_count: int
     reports: List[Reporte]

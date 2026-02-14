@@ -1,4 +1,8 @@
-// MÓDULO: interface/js/handlers/report-details-handler.js
+// MODULO: interface/js/handlers/report-details-handler.js
+
+// Manejador para interfaz de 'Detalles de Reporte'.
+
+
 import { showContent } from "../utils/dom-utils.js";
 import { renderEditReportForm } from "./edit-report-form-handler.js"; // Se importará una vez exista
 import { renderReportList } from "./report-list-handler.js";

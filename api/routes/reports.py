@@ -1,3 +1,8 @@
+# MODULO: api/routes/reports.py
+""" Contenedor de endpoints para la api.
+    Aplicación de APIRouter para la modularización de las rutas.
+"""
+
 from typing import List, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -8,6 +13,8 @@ from core.pdf_generator import generate_report_pdf
 from data import models, schemas
 from data.database import get_db
 
+
+# Instancia de APIRouter.
 router = APIRouter(
     prefix="/reportes",
     tags=["Reportes"]
@@ -22,16 +29,17 @@ router = APIRouter(
     status_code=status.HTTP_201_CREATED,
 )
 def create_reporte(reporte: schemas.Reporte, db: Session = Depends(get_db)):
-    """Crea un nuevo reporte en la base de datos junto a los totales de
+    """ Crea un nuevo reporte en la base de datos junto a los totales de
     Servicios, Repuestos y Total General.
     """
-    # 1. calcular totales de Servicios, Repuestos y Total General.
+
+    # Cálculo de totales de Servicios, Repuestos y Total General.
     total_servicios = sum(s.presupuesto for s in reporte.servicios)
     total_repuestos = sum(r.presupuesto for r in reporte.repuestos)
     total_general = total_servicios + total_repuestos
 
-    # 2. crear el objeto principal 'ReportesDB' a partir del modelo pydantic.
-    # incluye totales de Servicios y Repuestos.
+    # Creación del objeto principal 'ReportesDB' a partir del modelo pydantic.
+    # Incluye totales de Servicios y Repuestos.
     reporte_data = reporte.dict(exclude={"servicios", "repuestos"})
     reporte_data.update(
         {
@@ -42,18 +50,19 @@ def create_reporte(reporte: schemas.Reporte, db: Session = Depends(get_db)):
     )
     reporte_db = models.ReportesDB(**reporte_data)
 
-    # 3. crear los objetos 'ServiciosDB' y 'RepuestosDB' y los agrega a la creación.
+    # Creación de los objetos 'ServiciosDB' y 'RepuestosDB'. Se agregan los
+    # elementos a las listas.
     for servicio_in in reporte.servicios:
         reporte_db.servicios.append(models.ServiciosDB(**servicio_in.dict()))
 
     for repuesto_in in reporte.repuestos:
         reporte_db.repuestos.append(models.RepuestosDB(**repuesto_in.dict()))
 
-    # 4. agregar el reporte a la sesión de la base de datos y guardar.
+    # Agregar el reporte a la base de datos y guardar los cambios.
     db.add(reporte_db)
     db.commit()
 
-    # 5. refrescar el objeto para obtener los IDs generados por la base de datos.
+    # Refrescar el objeto para obtener los IDs generados por la base de datos.
     db.refresh(reporte_db)
 
     return reporte_db
@@ -63,7 +72,10 @@ def create_reporte(reporte: schemas.Reporte, db: Session = Depends(get_db)):
 # lista de reportes existentes
 @router.get("/", response_model=schemas.PaginatedReportsResponse)
 def lista_reportes(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
-    """Lista de reportes existentes, ordenados por los más recientes primero, con paginación"""
+    """ Lista de reportes existentes, ordenados por los más recientes primero,
+    con paginación de 15 reportes por página.
+    """
+
     total_reportes = db.query(models.ReportesDB).count()
     reportes = (
         db.query(models.ReportesDB)
@@ -81,7 +93,8 @@ def lista_reportes(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)
 # Filtro de búsqueda por id de orden.
 @router.get("/{reporte_id}", response_model=schemas.Reporte)
 def leer_reporte(reporte_id: int, db: Session = Depends(get_db)):
-    """Lee un reporte en específoco por id"""
+    """ Muestra un reporte en específoco asociado a un id. """
+
     reporte = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -104,7 +117,8 @@ def leer_reporte(reporte_id: int, db: Session = Depends(get_db)):
     response_model=List[schemas.Reporte],
 )
 def find_cedula(cedula_cliente: int, db: Session = Depends(get_db)):
-    """Lee un reporte en específico por cédula de cliente"""
+    """ Muestra reportes asociados a un número de cédula de cliente. """
+
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -128,7 +142,8 @@ def find_cedula(cedula_cliente: int, db: Session = Depends(get_db)):
     response_model=List[schemas.Reporte],
 )
 def find_nombre(nombre: str, db: Session = Depends(get_db)):
-    """Lee reportes asociados a un nombre de cliente (coincidencia parcial)"""
+    """ Muestra reportes asociados a un nombre de cliente. """
+
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -153,7 +168,8 @@ def find_nombre(nombre: str, db: Session = Depends(get_db)):
     response_model=List[schemas.Reporte],
 )
 def find_telefono(telefono: int, db: Session = Depends(get_db)):
-    """Lee reportes asociados a un número de teléfono específico"""
+    """ Muestra reportes asociados a un número de teléfono específico. """
+
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -177,7 +193,8 @@ def find_telefono(telefono: int, db: Session = Depends(get_db)):
     response_model=List[schemas.Reporte],
 )
 def find_placa(placa: str, db: Session = Depends(get_db)):
-    """Lee reportes asociados a una placa de vehículo específica"""
+    """ Muestra reportes asociados a una placa de vehículo específica. """
+
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -201,8 +218,9 @@ def find_placa(placa: str, db: Session = Depends(get_db)):
 def update_reporte(
     reporte_id: int, reporte_update: schemas.Reporte, db: Session = Depends(get_db)
 ):
-    """Actuliza los datos de un reporte filtrado por id"""
-    # filtrado del reporte a actualizar.
+    """ Actuliza los datos de un reporte filtrado por id. """
+
+    # Filtrado del reporte a actualizar.
     reporte_db = (
         db.query(models.ReportesDB)
         .filter(models.ReportesDB.id_reporte == reporte_id)
@@ -213,11 +231,11 @@ def update_reporte(
             status_code=status.HTTP_404_NOT_FOUND, detail="Reporte no encontrado"
         )
 
-    # cálculo de totales de servicios y repuestos.
+    # Cálculo de totales de servicios y repuestos.
     total_servicios = sum(s.presupuesto for s in reporte_update.servicios)
     total_repuestos = sum(r.presupuesto for r in reporte_update.repuestos)
 
-    # ctualización de los campos del reporte, incluyendo los totales.
+    # Actualización de los campos del reporte, incluyendo los totales.
     update_data = reporte_update.dict(
         exclude_unset=True, exclude={"servicios", "repuestos"}
     )
@@ -227,7 +245,7 @@ def update_reporte(
     for key, value in update_data.items():
         setattr(reporte_db, key, value)
 
-    # actualización de servicios y repuestos (método simple: borrar y recrear).
+    # Actualización de servicios y repuestos (método simple: borrar y recrear).
     reporte_db.servicios = []
     reporte_db.repuestos = []
     for servicio_in in reporte_update.servicios:
@@ -235,7 +253,7 @@ def update_reporte(
     for repuesto_in in reporte_update.repuestos:
         reporte_db.repuestos.append(models.RepuestosDB(**repuesto_in.dict()))
 
-    # guardar cambios, refrescar y devolver el objeto actualizado.
+    # Guardar cambios, refrescar y devolver el objeto actualizado.
     db.commit()
     db.refresh(reporte_db)
 
@@ -244,9 +262,11 @@ def update_reporte(
 
 # .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
 # Eliminar un registro
+# Función no implementada !
 @router.delete("/{reporte_id}", status_code=status.HTTP_200_OK)
 def delete_reporte(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, str]:
-    """Elimina un registro"""
+    """ Elimina un registro. """
+
     reporte_db = (
         db.query(models.ReportesDB)
         .filter(models.ReportesDB.id_reporte == reporte_id)
@@ -268,9 +288,8 @@ def delete_reporte(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, 
 # Generación de reporte en formato pdf.
 @router.get("/{reporte_id}/pdf")
 async def get_reporte_pdf(reporte_id: int, db: Session = Depends(get_db)):
-    """
-    Genera y devuelve el PDF de un reporte específico.
-    """
+    """ Genera y devuelve el PDF de un reporte específico. """
+
     reporte = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -281,14 +300,16 @@ async def get_reporte_pdf(reporte_id: int, db: Session = Depends(get_db)):
 
     if reporte is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Reporte no encontrado"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Reporte no encontrado"
         )
 
-    # Generar el PDF.
+    # Generar PDF.
     pdf_buffer = generate_report_pdf(reporte)
-    pdf_buffer.seek(0)  # Asegurarse de que el buffer esté al principio
+    # Asegurarse de que el buffer esté al principio.
+    pdf_buffer.seek(0)  
 
-    # Devolver el PDF como una respuesta de streaming
+    # Devolver el PDF como una respuesta de streaming.
     filename = f"reporte_{reporte_id}_{reporte.placa}.pdf"
     return StreamingResponse(
         pdf_buffer,

@@ -1,5 +1,5 @@
-// MÓDULO: interface/components/app-button-green/app-button-green.js
-//.. ....................................................... AppButtonGreen ..
+// MODULO: interface/components/app-button-green/app-button-green.js
+
 // Componente personalizado para un botón verde rectangular.
 
 import { BaseComponent } from "../BaseComponent.js";

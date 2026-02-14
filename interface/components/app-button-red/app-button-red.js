@@ -1,6 +1,7 @@
-// MÓDULO: interface/components/app-button-red/app-button-red.js
-//.. ......................................................... AppButtonRed ..
+// MODULO: interface/components/app-button-red/app-button-red.js
+
 // Componente oersonalizado para botones rojos rectangulares.
+
 
 import { BaseComponent } from "../BaseComponent.js";
 

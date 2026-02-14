@@ -1,4 +1,5 @@
-// MÓDULO: interface/js/main.js
+// MODULO: interface/js/main.js
+
 import { renderNewReportForm } from "./handlers/new-report-form-handler.js";
 import { renderReportList } from "./handlers/report-list-handler.js";
 import { renderSearchByIdForm, renderSearchByPlacaForm, renderSearchByClientForm } from "./handlers/search-handler.js";

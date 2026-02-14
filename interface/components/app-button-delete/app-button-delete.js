@@ -1,3 +1,7 @@
+// MODULO: interface/components/app-button-delete/app-button-delete.js
+
+// Web Component para botón eliminar servicio o repuesto (x).
+
 import { BaseComponent } from "../BaseComponent.js";
 
 const styles = `

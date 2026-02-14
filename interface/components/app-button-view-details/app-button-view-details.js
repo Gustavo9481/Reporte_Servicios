@@ -1,6 +1,7 @@
-// MÓDULO: interface/components/app-button-view-details/app-button-view-details.js
-//.. ................................................. AppButtonViewDetails ..
+// MODULO: interface/components/app-button-view-details/app-button-view-details.js
+
 // Componente personalizado para boton de Ver Detalles de reportes.
+
 
 import { BaseComponent } from "../BaseComponent.js";
 
