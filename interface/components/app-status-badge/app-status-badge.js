@@ -29,11 +29,11 @@ class AppStatusBadge extends BaseComponent {
     render() {
         const isActiva = this._status === 'activa';
         const backgroundColor = isActiva ? 'var(--green-color, #2a9d8f)' : 'var(--red-color, #c1121f)';
-        const textColor = 'var(--white-color, white)';
+        const textColor = 'var(--white-color)';
         const textContent = isActiva ? '✔' : '✖';
         const titleText = isActiva ? 'Activa' : 'Anulada';
 
-        // Los estilos ahora se calculan dinámicamente y se aplican
+        // Estilos Dinámicos.
         const styles = `
             :host {
                 display: inline-flex;
@@ -52,8 +52,7 @@ class AppStatusBadge extends BaseComponent {
                 margin: 0;
             }
         `;
-        
-        // Limpiamos el shadow root y aplicamos todo de nuevo para asegurar la actualización
+
         this.shadowRoot.innerHTML = '';
         this.applyStyles(styles);
         this.shadowRoot.innerHTML += `<span title="${titleText}">${textContent}</span>`;

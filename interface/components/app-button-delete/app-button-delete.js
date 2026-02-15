@@ -6,31 +6,31 @@ import { BaseComponent } from "../BaseComponent.js";
 
 const styles = `
     :host {
-        display: inline-flex; /* Usar inline-flex para centrar contenido */
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 24px; /* Tamaño ajustado para igualar a app-status-badge */
-        height: 24px; /* Tamaño ajustado para igualar a app-status-badge */
+        width: 24px;
+        height: 24px;
         border-radius: 50%;
-        background-color: var(--red-color, #c1121f); /* Color rojo para eliminar */
-        color: var(--white-color, white);
-        font-size: 14px; /* Tamaño de fuente ajustado */
+        background-color: var(--red-color);
+        color: var(--white-color);
+        font-size: 14px;
         font-weight: bold;
         border: none;
         box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        cursor: pointer; /* Indicar que es interactivo */
-        margin: 0 5px; /* Espacio alrededor del botón */
-        transition: background-color 0.3s ease; /* Transición para hover */
+        cursor: pointer;
+        margin: 0 5px;
+        transition: background-color 0.3s ease;
     }
     :host(:hover) {
-        background-color: var(--darker-red, #9a0e19); /* Oscurecer en hover */
+        background-color: var(--red-darker);
     }
     button {
-        background: none; /* El background lo maneja :host */
+        background: none;
         border: none;
-        color: inherit; /* Heredar color del host */
-        font: inherit; /* Heredar fuente del host */
-        cursor: inherit; /* Heredar cursor del host */
+        color: inherit;
+        font: inherit;
+        cursor: inherit;
         padding: 0;
         width: 100%;
         height: 100%;

@@ -13,11 +13,11 @@ const styles = `
       background-color: var(--blue-color);
       color: white;
       border: none;
-      border-radius: 50%; /* Makes it a circle */
+      border-radius: 50%;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      width: 40px; /* Fixed width */
-      height: 40px; /* Fixed height */
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -25,10 +25,10 @@ const styles = `
       line-height: 1;
     }
     button:hover {
-      background-color: #3a56d4; /* Darker blue */
+      background-color: var(--blue-darker);
     }
     button:disabled {
-      background-color: white;
+      background-color: var(white-color);
       color: var(--grey-color);
       cursor: not-allowed;
     }
@@ -40,9 +40,8 @@ class AppButtonPaginationNext extends BaseComponent {
   }
 
   connectedCallback() {
-    // this.applyStyles(styles);
-    this.shadowRoot.innerHTML = `
-        <style>${styles}</style>
+    this.applyStyles(styles);
+    this.shadowRoot.innerHTML += `
         <button>
           <slot></slot>
         </button>
