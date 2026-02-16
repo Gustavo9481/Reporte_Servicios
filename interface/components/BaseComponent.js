@@ -2,7 +2,7 @@
 // Calse madre para web components.
 
 export class BaseComponent extends HTMLElement {
-    
+
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -25,7 +25,10 @@ export class BaseComponent extends HTMLElement {
      * Shadow DOM.
      */
     setupSubmitBehavior(buttonElement) {
-        // Propagar el atributo 'type'
+        // Establecer 'button' por defecto para evitar submits accidentales en formularios.
+        buttonElement.type = "button";
+
+        // Si el componente tiene un atributo 'type', aplicarlo al botón interno.
         if (this.hasAttribute("type")) {
             buttonElement.type = this.getAttribute("type");
         }

@@ -1,18 +1,17 @@
-# MODULO: api/routes/reports.py
-""" Contenedor de endpoints para la api.
-    Aplicación de APIRouter para la modularización de las rutas.
+"""Contenedor de endpoints para la api.
+
+Aplicación de APIRouter para la modularización de las rutas.
 """
 
 from typing import List, Dict
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session, joinedload
-from starlette.responses import StreamingResponse
 
-from core.pdf_generator import generate_report_pdf
+from core.pdf import generate_report_pdf
 from data import models, schemas
 from data.database import get_db
-
 
 # Instancia de APIRouter.
 router = APIRouter(
@@ -21,25 +20,29 @@ router = APIRouter(
 )
 
 
-# .. ............................................... endpoint -> /reportes/ ..󰌠
-# Creación de nuevos reportes.
 @router.post(
     "/",
     response_model=schemas.Reporte,
     status_code=status.HTTP_201_CREATED,
 )
-def create_reporte(reporte: schemas.Reporte, db: Session = Depends(get_db)):
-    """ Crea un nuevo reporte en la base de datos junto a los totales de
-    Servicios, Repuestos y Total General.
-    """
+def create_report(reporte: schemas.Reporte, db: Session = Depends(get_db)):
+    """Crea un nuevo reporte en la base de datos.
 
+    Calcula automáticamente los totales de servicios y repuestos.
+
+    Args:
+        reporte: Esquema de datos del reporte a crear.
+        db: Sesión de base de datos.
+
+    Returns:
+        El objeto ReportesDB creado.
+    """
     # Cálculo de totales de Servicios, Repuestos y Total General.
     total_servicios = sum(s.presupuesto for s in reporte.servicios)
     total_repuestos = sum(r.presupuesto for r in reporte.repuestos)
     total_general = total_servicios + total_repuestos
 
     # Creación del objeto principal 'ReportesDB' a partir del modelo pydantic.
-    # Incluye totales de Servicios y Repuestos.
     reporte_data = reporte.dict(exclude={"servicios", "repuestos"})
     reporte_data.update(
         {
@@ -50,8 +53,7 @@ def create_reporte(reporte: schemas.Reporte, db: Session = Depends(get_db)):
     )
     reporte_db = models.ReportesDB(**reporte_data)
 
-    # Creación de los objetos 'ServiciosDB' y 'RepuestosDB'. Se agregan los
-    # elementos a las listas.
+    # Creación de los objetos 'ServiciosDB' y 'RepuestosDB'.
     for servicio_in in reporte.servicios:
         reporte_db.servicios.append(models.ServiciosDB(**servicio_in.dict()))
 
@@ -68,14 +70,18 @@ def create_reporte(reporte: schemas.Reporte, db: Session = Depends(get_db)):
     return reporte_db
 
 
-# .. ............................................... endpoint -> /reportes/ ..󰌠
-# lista de reportes existentes
 @router.get("/", response_model=schemas.PaginatedReportsResponse)
-def lista_reportes(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
-    """ Lista de reportes existentes, ordenados por los más recientes primero,
-    con paginación de 15 reportes por página.
-    """
+def get_reports(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)):
+    """Obtiene una lista paginada de reportes.
 
+    Args:
+        skip: Cantidad de registros a saltar (offset).
+        limit: Cantidad máxima de registros a retornar.
+        db: Sesión de base de datos.
+
+    Returns:
+        Un diccionario con el total de reportes y la lista de reportes para la página actual.
+    """
     total_reportes = db.query(models.ReportesDB).count()
     reportes = (
         db.query(models.ReportesDB)
@@ -89,12 +95,20 @@ def lista_reportes(skip: int = 0, limit: int = 15, db: Session = Depends(get_db)
     return {"total_count": total_reportes, "reports": reportes}
 
 
-# .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
-# Filtro de búsqueda por id de orden.
 @router.get("/{reporte_id}", response_model=schemas.Reporte)
-def leer_reporte(reporte_id: int, db: Session = Depends(get_db)):
-    """ Muestra un reporte en específoco asociado a un id. """
+def get_report_by_id(reporte_id: int, db: Session = Depends(get_db)):
+    """Obtiene un reporte específico por su ID.
 
+    Args:
+        reporte_id: ID del reporte a buscar.
+        db: Sesión de base de datos.
+
+    Returns:
+        El objeto ReportesDB encontrado.
+
+    Raises:
+        HTTPException: Si el reporte no existe.
+    """
     reporte = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -110,15 +124,23 @@ def leer_reporte(reporte_id: int, db: Session = Depends(get_db)):
     return reporte
 
 
-# .. ....................... endpoint -> /reportes/cliente/{cedula_cliente} ..󰌠
-# Filtro de búsqueda por cédula cliente.
 @router.get(
     "/cliente/{cedula_cliente}",
     response_model=List[schemas.Reporte],
 )
-def find_cedula(cedula_cliente: int, db: Session = Depends(get_db)):
-    """ Muestra reportes asociados a un número de cédula de cliente. """
+def get_reports_by_client_id(cedula_cliente: int, db: Session = Depends(get_db)):
+    """Busca reportes por cédula del cliente.
 
+    Args:
+        cedula_cliente: Cédula del cliente.
+        db: Sesión de base de datos.
+
+    Returns:
+        Lista de reportes encontrados.
+
+    Raises:
+        HTTPException: Si no se encuentran reportes para el cliente.
+    """
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -135,15 +157,23 @@ def find_cedula(cedula_cliente: int, db: Session = Depends(get_db)):
     return reportes
 
 
-# .. ........................ endpoint -> /reportes/cliente/nombre/{nombre} ..󰌠
-# Filtro de búsqueda por nombre de cliente.
 @router.get(
     "/cliente/nombre/{nombre}",
     response_model=List[schemas.Reporte],
 )
-def find_nombre(nombre: str, db: Session = Depends(get_db)):
-    """ Muestra reportes asociados a un nombre de cliente. """
+def get_reports_by_client_name(nombre: str, db: Session = Depends(get_db)):
+    """Busca reportes por nombre del cliente (búsqueda parcial insensible a mayúsculas).
 
+    Args:
+        nombre: Nombre o fragmento del nombre del cliente.
+        db: Sesión de base de datos.
+
+    Returns:
+        Lista de reportes encontrados.
+
+    Raises:
+        HTTPException: Si no se encuentran reportes.
+    """
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -161,15 +191,23 @@ def find_nombre(nombre: str, db: Session = Depends(get_db)):
     return reportes
 
 
-# .. .................... endpoint -> /reportes/cliente/telefono/{telefono} ..󰌠
-# Filtro de búsqueda por teléfono de cliente.
 @router.get(
     "/cliente/telefono/{telefono}",
     response_model=List[schemas.Reporte],
 )
-def find_telefono(telefono: int, db: Session = Depends(get_db)):
-    """ Muestra reportes asociados a un número de teléfono específico. """
+def get_reports_by_client_phone(telefono: int, db: Session = Depends(get_db)):
+    """Busca reportes por teléfono del cliente.
 
+    Args:
+        telefono: Número de teléfono del cliente.
+        db: Sesión de base de datos.
+
+    Returns:
+        Lista de reportes encontrados.
+
+    Raises:
+        HTTPException: Si no se encuentran reportes.
+    """
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -186,15 +224,23 @@ def find_telefono(telefono: int, db: Session = Depends(get_db)):
     return reportes
 
 
-# .. .................................. endpoint -> /reportes/placa/{placa} ..󰌠
-# Filtro de búsqueda por placa de vehículo.
 @router.get(
     "/placa/{placa}",
     response_model=List[schemas.Reporte],
 )
-def find_placa(placa: str, db: Session = Depends(get_db)):
-    """ Muestra reportes asociados a una placa de vehículo específica. """
+def get_reports_by_plate(placa: str, db: Session = Depends(get_db)):
+    """Busca reportes por placa del vehículo.
 
+    Args:
+        placa: Placa del vehículo.
+        db: Sesión de base de datos.
+
+    Returns:
+        Lista de reportes encontrados.
+
+    Raises:
+        HTTPException: Si no se encuentran reportes.
+    """
     reportes = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -212,14 +258,23 @@ def find_placa(placa: str, db: Session = Depends(get_db)):
     return reportes
 
 
-# .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
-# Edición de un registro
 @router.put("/{reporte_id}", response_model=schemas.Reporte)
-def update_reporte(
+def update_report(
     reporte_id: int, reporte_update: schemas.Reporte, db: Session = Depends(get_db)
 ):
-    """ Actuliza los datos de un reporte filtrado por id. """
+    """Actualiza los datos de un reporte existente.
 
+    Args:
+        reporte_id: ID del reporte a actualizar.
+        reporte_update: Esquema con los nuevos datos del reporte.
+        db: Sesión de base de datos.
+
+    Returns:
+        El objeto ReportesDB actualizado.
+
+    Raises:
+        HTTPException: Si el reporte no existe.
+    """
     # Filtrado del reporte a actualizar.
     reporte_db = (
         db.query(models.ReportesDB)
@@ -260,13 +315,54 @@ def update_reporte(
     return reporte_db
 
 
-# .. ................................... endpoint -> /reportes/{reporte_id} ..󰌠
-# Eliminar un registro
-# Función no implementada !
-@router.delete("/{reporte_id}", status_code=status.HTTP_200_OK)
-def delete_reporte(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, str]:
-    """ Elimina un registro. """
+@router.delete("/clean", status_code=status.HTTP_200_OK)
+def delete_old_reports(db: Session = Depends(get_db)):
+    """Elimina los 10 reportes más antiguos de la base de datos.
 
+    Args:
+        db: Sesión de base de datos.
+
+    Returns:
+        Un mensaje con la cantidad de registros eliminados.
+    """
+    # Buscar los 10 IDs más bajos (ascendente).
+    reportes = (
+        db.query(models.ReportesDB)
+        .order_by(models.ReportesDB.id_reporte.asc())
+        .limit(10)
+        .all()
+    )
+
+    if not reportes:
+        return {"message": "No hay reportes para eliminar."}
+
+    count = len(reportes)
+    for r in reportes:
+        db.delete(r)
+
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al confirmar eliminación: {str(e)}")
+
+    return {"message": f"Se han eliminado {count} reportes antiguos correctamente."}
+
+
+@router.delete("/{reporte_id}", status_code=status.HTTP_200_OK)
+def delete_report(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, str]:
+    """Elimina un reporte por su ID.
+
+    Args:
+        reporte_id: ID del reporte a eliminar.
+        db: Sesión de base de datos.
+
+    Returns:
+        Mensaje de confirmación.
+
+    Raises:
+        HTTPException: Si el reporte no existe.
+    """
     reporte_db = (
         db.query(models.ReportesDB)
         .filter(models.ReportesDB.id_reporte == reporte_id)
@@ -284,12 +380,20 @@ def delete_reporte(reporte_id: int, db: Session = Depends(get_db)) -> Dict[str, 
     return {"message": f"Reporte con ID {reporte_id} eliminado exitosamente"}
 
 
-# .. ............................... endpoint -> /reportes/{reporte_id}/pdf ..󰌠
-# Generación de reporte en formato pdf.
 @router.get("/{reporte_id}/pdf")
-async def get_reporte_pdf(reporte_id: int, db: Session = Depends(get_db)):
-    """ Genera y devuelve el PDF de un reporte específico. """
+async def get_report_pdf(reporte_id: int, db: Session = Depends(get_db)):
+    """Genera y descarga el PDF de un reporte específico.
 
+    Args:
+        reporte_id: ID del reporte.
+        db: Sesión de base de datos.
+
+    Returns:
+        StreamingResponse con el archivo PDF.
+
+    Raises:
+        HTTPException: Si el reporte no existe.
+    """
     reporte = (
         db.query(models.ReportesDB)
         .options(joinedload(models.ReportesDB.servicios))
@@ -307,7 +411,7 @@ async def get_reporte_pdf(reporte_id: int, db: Session = Depends(get_db)):
     # Generar PDF.
     pdf_buffer = generate_report_pdf(reporte)
     # Asegurarse de que el buffer esté al principio.
-    pdf_buffer.seek(0)  
+    pdf_buffer.seek(0)
 
     # Devolver el PDF como una respuesta de streaming.
     filename = f"reporte_{reporte_id}_{reporte.placa}.pdf"

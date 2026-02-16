@@ -1,4 +1,5 @@
 # MODULO: api/__init__.py
-""" Archivo de conversión de paquete del m´odulo api/.
-    Almacén de rutas (endpoints).
+"""Archivo de conversión de paquete del módulo api.
+
+Almacena las rutas (endpoints) de la aplicación.
 """ 

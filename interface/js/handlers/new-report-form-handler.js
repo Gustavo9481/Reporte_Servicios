@@ -89,13 +89,13 @@ export const renderNewReportForm = () => {
                     <div class="form-section">
                         <h3>Servicios a Realizar</h3>
                         <div id="servicios-container"></div>
-                        <app-button-blue id="btnAddServicio">+ Añadir Servicio</app-button-blue>
+                        <app-button-blue id="btnAddServicio" type="button">+ Añadir Servicio</app-button-blue>
                     </div>
 
                     <div class="form-section">
                         <h3>Repuestos a Utilizar</h3>
                         <div id="repuestos-container"></div>
-                        <app-button-blue id="btnAddRepuesto">+ Añadir Repuesto</app-button-blue>
+                        <app-button-blue id="btnAddRepuesto" type="button">+ Añadir Repuesto</app-button-blue>
                     </div>
 
                     <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end;">

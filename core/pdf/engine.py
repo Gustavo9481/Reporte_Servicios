@@ -1,20 +1,18 @@
-"""Generador de PDFs para Reporte_Servicios.
+"""Motor de generación del PDF.
 
-Este módulo utiliza ReportLab para generar archivos PDF con la información
-detallada de los reportes de servicio, incluyendo checklist, presupuesto
-y firmas.
+Contiene la clase ServiceReportPDF que orquesta la creación del documento.
 """
 
 from io import BytesIO
 from typing import Any, List, Tuple
 
 from reportlab.lib import colors
-from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet, StyleSheet1
 from reportlab.lib.units import inch
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 from reportlab.platypus.flowables import Flowable
+
+from core.pdf.styles import draw_footer_callback, get_report_styles
 
 
 class ServiceReportPDF:
@@ -41,7 +39,7 @@ class ServiceReportPDF:
             bottomMargin=50,
         )
         self.usable_width = letter[0] - self.doc.leftMargin - self.doc.rightMargin - 1
-        self.styles = self._get_styles()
+        self.styles = get_report_styles()
         self.story: List[Flowable] = []
 
     def generate(self) -> BytesIO:
@@ -61,52 +59,11 @@ class ServiceReportPDF:
         # Build del documento con callback para el footer en cada página
         self.doc.build(
             self.story,
-            onFirstPage=self._draw_footer_callback,
-            onLaterPages=self._draw_footer_callback,
+            onFirstPage=draw_footer_callback,
+            onLaterPages=draw_footer_callback,
         )
         self.buffer.seek(0)
         return self.buffer
-
-    def _get_styles(self) -> StyleSheet1:
-        """Configura los estilos del documento."""
-        styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="Left", alignment=TA_LEFT))
-        styles.add(ParagraphStyle(name="Right", alignment=TA_RIGHT))
-        styles.add(
-            ParagraphStyle(
-                name="Checklist", parent=styles["Normal"], fontSize=7.5, leading=8
-            )
-        )
-        styles.add(
-            ParagraphStyle(
-                name="Signature",
-                parent=styles["Normal"],
-                fontSize=5,
-                alignment=TA_CENTER,
-            )
-        )
-        styles["h1"].alignment = TA_CENTER
-        styles["h1"].fontSize = 7.5
-        styles["h1"].fontName = "Helvetica-Bold"
-        styles["h3"].alignment = TA_LEFT
-        styles["h3"].fontSize = 7.5
-        styles["h3"].fontName = "Helvetica-Bold"
-        styles["h3"].textColor = colors.black
-        styles["h3"].spaceBefore = 2
-        styles["h3"].spaceAfter = 2
-        styles["Normal"].fontSize = 7.5
-        from reportlab.lib.enums import TA_JUSTIFY
-        styles.add(
-            ParagraphStyle(
-                name="Clause",
-                parent=styles["Normal"],
-                fontSize=6.5,
-                leading=8,
-                alignment=TA_JUSTIFY,
-                fontName="Helvetica-Oblique",
-            )
-        )
-        return styles
 
     # --- Secciones del Documento (En orden visual) ---
 
@@ -119,6 +76,7 @@ class ServiceReportPDF:
             "Tlf. : 0212-3236867 | 0414-1259502"
         )
         
+        # Estilo para la info de la empresa (alineado a la izquierda, más pequeño)
         from reportlab.lib.styles import ParagraphStyle
         from reportlab.lib.enums import TA_LEFT, TA_RIGHT
         
@@ -140,6 +98,7 @@ class ServiceReportPDF:
         right_content = Paragraph(f"Reporte de Servicio -> #{self.report_data.id_reporte}", report_id_style)
 
         data = [[left_content, right_content]]
+        # 60% para empresa, 40% para reporte id
         col_widths = [self.usable_width * 0.6, self.usable_width * 0.4]
         
         table = Table(data, colWidths=col_widths)
@@ -325,7 +284,7 @@ class ServiceReportPDF:
             "de los trabajos bajo los términos descritos."
         )
         self.story.append(Paragraph(clause_text, self.styles["Clause"]))
-
+        
         self.story.append(Spacer(1, 0.5 * inch))
         data = [
             ["", "________________________"],
@@ -336,7 +295,7 @@ class ServiceReportPDF:
         table.setStyle(TableStyle([("ALIGN", (1, 0), (1, 1), "CENTER")]))
         self.story.append(table)
 
-    # --- Helpers y Callbacks ---
+    # --- Helpers ---
 
     def _create_checklist_table(self, items: List[Tuple[str, bool]]) -> Table:
         """Crea una tabla con formato de checklist."""
@@ -388,40 +347,3 @@ class ServiceReportPDF:
             )
         )
         return t
-
-    @staticmethod
-    def _draw_footer_callback(canvas: Any, doc: SimpleDocTemplate) -> None:
-        """Dibuja el pie de página (Callback para ReportLab)."""
-        canvas.saveState()
-
-        footer_style = ParagraphStyle(
-            name="Footer",
-            fontSize=8,
-            alignment=TA_CENTER,
-            textColor=colors.grey,
-        )
-
-        text = """
-        Avenida Independencia El Llano de Miquilen, Municipio Bolivariano de Guaicaipuro Estado Miranda.
-        """
-
-        p = Paragraph(text, footer_style)
-        w, h = p.wrap(doc.width * 0.7, doc.bottomMargin)
-        x = doc.leftMargin + (doc.width - (doc.width * 0.7)) / 2
-        y = doc.bottomMargin - h - 20
-
-        p.drawOn(canvas, x, y)
-        canvas.restoreState()
-
-
-def generate_report_pdf(report_data: Any) -> BytesIO:
-    """Función fachada para mantener compatibilidad con la API.
-
-    Args:
-        report_data: Datos del reporte.
-
-    Returns:
-        BytesIO con el PDF.
-    """
-    report_pdf = ServiceReportPDF(report_data)
-    return report_pdf.generate()

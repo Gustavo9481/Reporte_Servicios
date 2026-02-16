@@ -1,13 +1,13 @@
-# MODULO: core/main.py
-""" Archivo de lanzamiento de la app, almacén de endpoints.
-    Rutas modularizadas con APIRouter.
+"""Archivo de lanzamiento de la app.
+
+Almacena los endpoints principales y la configuración de la aplicación FastAPI.
 """
 
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from starlette.responses import HTMLResponse
+from fastapi.responses import HTMLResponse
 from starlette.staticfiles import StaticFiles
 
 from api.routes import reports
@@ -16,11 +16,11 @@ from data.database import create_db_tables
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """ Gestión del ciclo de vida de la aplicación. Se ejecuta al iniciar y
-    cerrar el servidor. Verifica que las tablas esten creadas al iniciar la
-    app.
-    """
+    """Gestión del ciclo de vida de la aplicación.
 
+    Se ejecuta al iniciar y cerrar el servidor.
+    Verifica que las tablas de la base de datos estén creadas al iniciar la app.
+    """
     create_db_tables()
     yield
 
@@ -48,12 +48,18 @@ app.mount("/static", StaticFiles(directory="interface"), name="static")
 app.include_router(reports.router)
 
 
-# .. ..................................................... endpoint -> root ..󰌠
+# .. ..................................................... endpoint -> root ..
 # Entrada a la app
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)  # oculta de /docs
 async def serve_index_html():
-    """ Sirve el archivo HTML a la página de inicio. """
+    """Sirve el archivo HTML de la página de inicio.
 
+    Returns:
+        El contenido del archivo index.html.
+
+    Raises:
+        HTTPException: Si el archivo index.html no se encuentra.
+    """
     html_file_path = Path("interface/index.html")
 
     if not html_file_path.is_file():
@@ -61,10 +67,13 @@ async def serve_index_html():
     return html_file_path.read_text()
 
 
-# .. .............................................. endpoint -> /api/status ..󰌠
+# .. .............................................. endpoint -> /api/status ..
 # Mensaje de conexión de la api.
 @app.get("/api/status")
 def get_api_status():
-    """ Test para raíz de la api, sirve un mensaje. """
+    """Test para la raíz de la API.
 
-    return {"API -> Reportes de taller | Bienvenido !!"}
+    Returns:
+        Un diccionario con el estado de la API.
+    """
+    return {"status": "API -> Reportes de taller | Bienvenido !!"}
