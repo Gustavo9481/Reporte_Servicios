@@ -18,13 +18,3 @@ Esta sección contiene la documentación automática extraída de los docstrings
 
 ::: data.schemas
 
-## Pruebas (Tests)
-
-### Factores y Configuración
-::: tests.conftest
-
-### Tests de Estado
-::: tests.test_status
-
-### Tests de Reportes
-::: tests.test_reports

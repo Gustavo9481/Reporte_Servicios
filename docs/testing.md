@@ -47,6 +47,15 @@ Las pruebas cubren actualmente:
     *   Actualización de datos.
     *   Eliminación de registros.
 
-## TestSprite
+## Detalles Técnicos de las Pruebas
 
-El proyecto está preparado para la integración con **TestSprite** para validaciones adicionales de calidad y consistencia con el PRD.
+A continuación se presenta la documentación automática extraída de los archivos de prueba, donde se detallan los casos de uso cubiertos.
+
+### Factores y Configuración
+::: tests.conftest
+
+### Tests de Estado
+::: tests.test_status
+
+### Tests de Reportes
+::: tests.test_reports
