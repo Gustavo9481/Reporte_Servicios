@@ -39,4 +39,5 @@ plugins:
 
 nav:
   - Inicio: index.md
+  - Pruebas: testing.md
   - Referencia de API: reference.md
