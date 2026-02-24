@@ -8,10 +8,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 import os
 from pathlib import Path
+from core.paths import get_app_data_path
 
-# Creación y ubicación de la base de datos dentro de carpeta data/.
-DB_PATH = Path("./data/dB.sqlite3")
-DOMAIN_DIR = DB_PATH.parent
+# Creación y ubicación de la base de datos en el directorio de datos de la aplicación.
+DOMAIN_DIR = get_app_data_path()
+DB_PATH = DOMAIN_DIR / "dB.sqlite3"
 
 # Comprobación de la existencia del directorio.
 if not DOMAIN_DIR.exists():

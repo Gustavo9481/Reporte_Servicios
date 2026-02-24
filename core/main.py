@@ -12,6 +12,7 @@ from starlette.staticfiles import StaticFiles
 
 from api.routes import reports
 from data.database import create_db_tables
+from core.paths import get_resource_path
 
 
 @asynccontextmanager
@@ -42,7 +43,8 @@ app = FastAPI(
 
 # Montado de la carpeta 'interface' como estáticos en '/static/'.
 # Sirve los archivos del módulo interface para crear la UI.
-app.mount("/static", StaticFiles(directory="interface"), name="static")
+interface_path = get_resource_path("interface")
+app.mount("/static", StaticFiles(directory=str(interface_path)), name="static")
 
 # Incluir routers -> endpoints. Modularización con APIRouter.
 app.include_router(reports.router)
@@ -60,7 +62,7 @@ async def serve_index_html():
     Raises:
         HTTPException: Si el archivo index.html no se encuentra.
     """
-    html_file_path = Path("interface/index.html")
+    html_file_path = get_resource_path("interface/index.html")
 
     if not html_file_path.is_file():
         raise HTTPException(status_code=404, detail="Archivo index no encontrado")
