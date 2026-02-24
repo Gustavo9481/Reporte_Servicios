@@ -38,3 +38,12 @@ jobs:
           name: Reporte_Servicios_Windows
           path: dist/Reporte_Servicios.exe
           if-no-files-found: error
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/Reporte_Servicios.exe
+          body: "Ejecutable para Windows generado automáticamente."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
