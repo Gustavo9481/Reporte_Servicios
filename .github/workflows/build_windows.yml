@@ -1,0 +1,40 @@
+name: Build Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch: # Permite ejecutarlo manualmente desde la pestaña Actions
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-path: "uv.lock"
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Install dependencies
+        run: |
+          uv pip install .
+          uv pip install pyinstaller
+
+      - name: Build with PyInstaller
+        run: |
+          uv run pyinstaller windows_build.spec
+
+      - name: Upload Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: Reporte_Servicios_Windows
+          path: dist/Reporte_Servicios.exe
+          if-no-files-found: error
