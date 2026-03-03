@@ -1,13 +1,8 @@
-from PyInstaller.utils.hooks import collect_submodules, collect_data_files
+# -*- mode: python ; coding: utf-8 -*-
 
 block_cipher = None
 
-# Recolectar automáticamente todos los módulos de librerías críticas
-hidden_uvicorn = collect_submodules('uvicorn')
-hidden_fastapi = collect_submodules('fastapi')
-hidden_starlette = collect_submodules('starlette')
-hidden_pydantic = collect_submodules('pydantic')
-
+# Definición de archivos adicionales (estáticos)
 added_files = [
     ('interface', 'interface'),
 ]
@@ -17,7 +12,17 @@ a = Analysis(
     pathex=['.'],
     binaries=[],
     datas=added_files,
-    hiddenimports=hidden_uvicorn + hidden_fastapi + hidden_starlette + hidden_pydantic + [
+    hiddenimports=[
+        'uvicorn.logging',
+        'uvicorn.loops',
+        'uvicorn.loops.auto',
+        'uvicorn.protocols',
+        'uvicorn.protocols.http',
+        'uvicorn.protocols.http.auto',
+        'uvicorn.protocols.websockets',
+        'uvicorn.protocols.websockets.auto',
+        'uvicorn.lifespan',
+        'uvicorn.lifespan.on',
         'email.mime.multipart',
         'email.mime.text',
     ],
