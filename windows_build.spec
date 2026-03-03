@@ -1,6 +1,8 @@
 from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 
-# Recolectar automáticamente todos los módulos y datos de librerías críticas
+block_cipher = None
+
+# Recolectar automáticamente todos los módulos de librerías críticas
 hidden_uvicorn = collect_submodules('uvicorn')
 hidden_fastapi = collect_submodules('fastapi')
 hidden_starlette = collect_submodules('starlette')
@@ -8,7 +10,7 @@ hidden_pydantic = collect_submodules('pydantic')
 
 added_files = [
     ('interface', 'interface'),
-] + collect_data_files('uvicorn') + collect_data_files('fastapi')
+]
 
 a = Analysis(
     ['run_app.py'],
