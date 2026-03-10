@@ -1,0 +1,88 @@
+{
+  "project": {
+    "name": "Reporte de Servicios",
+    "version": "1.0.0",
+    "description": "Aplicación web de gestión de reportes para talleres mecánicos",
+    "author": "Gustavo Colmenares | GUScode",
+    "email": "g_colmenares9481@proton.me",
+    "license": "MIT",
+    "python_version": "3.10"
+  },
+  "features": [
+    "Gestión completa de reportes (CRUD)",
+    "Generación automática de PDFs profesionales",
+    "Interfaz web intuitiva con Web Components",
+    "Base de datos SQLite integrada",
+    "API REST documentada con FastAPI",
+    "Empaquetado para Windows sin dependencias"
+  ],
+  "tech_stack": {
+    "backend": [
+      "FastAPI",
+      "SQLAlchemy",
+      "Pydantic",
+      "ReportLab",
+      "Uvicorn"
+    ],
+    "frontend": [
+      "JavaScript Vanilla",
+      "Web Components",
+      "CSS3"
+    ],
+    "database": [
+      "SQLite"
+    ],
+    "build_tools": [
+      "PyInstaller",
+      "pytest"
+    ]
+  },
+  "api_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/status",
+      "description": "Verifica el estado de la API"
+    },
+    {
+      "method": "POST",
+      "path": "/api/reportes",
+      "description": "Crea un nuevo reporte"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reportes",
+      "description": "Lista todos los reportes con paginación"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reportes/{id}",
+      "description": "Obtiene un reporte específico por ID"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reportes/placa/{placa}",
+      "description": "Busca reportes por placa del vehículo"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/reportes/{id}",
+      "description": "Actualiza un reporte existente"
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/reportes/{id}",
+      "description": "Elimina un reporte"
+    },
+    {
+      "method": "GET",
+      "path": "/api/reportes/{id}/pdf",
+      "description": "Genera y descarga el PDF del reporte"
+    }
+  ],
+  "docs_links": {
+    "user_guide": "docs/INSTRUCCIONES_USUARIO.md",
+    "api_reference": "docs/reference.md",
+    "testing": "docs/testing.md",
+    "mkdocs_site": "site/index.html"
+  }
+}
